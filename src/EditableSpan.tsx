@@ -23,11 +23,12 @@ export function EditableSpan(props: EditableSpanPropsType) {
     }
     const onChangeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
 
-    return (editMode
+    return (
+        editMode
             ? <input autoFocus onBlur={offEditModeHandler}
                      onKeyPress={offKeyPressEditModeHandler}
                      value={title}
                      onChange={onChangeTitleHandler}/>
-            : <span onDoubleClick={onEditModeHandler}>{props.title}</span>
+            : <span style={{wordWrap: 'break-word'}} onDoubleClick={onEditModeHandler}>{props.title}</span>
     )
 }

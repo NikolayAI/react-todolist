@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import {Button, Grid, TextField} from "@material-ui/core";
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -11,22 +13,28 @@ export function AddItemForm(props: AddItemFormPropsType) {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
     const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
         setError('')
-        e.ctrlKey && e.key === 'Enter' && addTask()
+        e.ctrlKey && e.key === 'Enter' && addItem()
     }
-    const addTask = () => {
+    const addItem = () => {
         title.trim() === '' ? setError('Field is required') : props.addItem(title.trim())
         setTitle('')
     }
 
     return (
-        <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyUp={onKeyUpHandler}
-                   className={error ? 'error' : ''}
-            />
-            <button onClick={addTask}>+</button>
+        <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center">
+            <TextField error={error === 'Field is required'}
+                id="standard-basic"
+                label="Write title"
+                value={title}
+                onChange={onChangeHandler}
+                onKeyUp={onKeyUpHandler}
+                className={error ? 'error' : ''}/>
+            <Button size={"large"} variant="contained" color="secondary" onClick={addItem}><PostAddIcon/></Button>
             {error && <div className={'error-message'}>{error}</div>}
-        </div>
+        </Grid>
     )
 }
