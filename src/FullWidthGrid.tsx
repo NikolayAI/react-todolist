@@ -57,7 +57,7 @@ export function FullWidthGrid(props: FullWidthGridPropsType) {
                         tasksForTodolist = tasksForTodolist.filter(t => t.isDone)
                     }
                     return (
-                        <Grid key={tl.id} item style={{margin: '0'}} xs>
+                        <Grid key={tl.id} item style={{margin: '0'}} xs={12} sm={6} md={4}>
                             <Paper className={classes.paper}>
                                 <TodoList
                                     id={tl.id}
