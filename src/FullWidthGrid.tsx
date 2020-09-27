@@ -4,7 +4,9 @@ import {AddItemForm} from "./AddItemForm";
 import {TodoList} from "./Todolist";
 import React from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {FilterValuesType, TasksStateType, TodoListType} from "./App";
+import {FilterValuesType, TasksStateType, TodoListType} from "./AppWithRedux";
+import {useSelector} from "react-redux";
+import {RootStateType} from "./state/store";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,19 +28,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),);
 
 type FullWidthGridPropsType = {
-    removeTask: (taskID: string, todoListId: string) => void
-    changeFilter: (value: FilterValuesType, todoListId: string) => void
-    addTask: (title: string, todoListId: string) => void
-    changeTaskStatus: (taskID: string, isDone: boolean, todoListId: string) => void
-    changeTaskTitle: (taskID: string, title: string, todoListId: string) => void
+    changeFilter: (todoListId: string, value: FilterValuesType) => void
     changeTodolistTitle: (title: string, todoListId: string) => void
     removeTodoList: (todolistId: string) => void
     addTodolist: (title: string) => void
     todoLists: TodoListType[]
-    tasksObj: TasksStateType
 }
 
 export function FullWidthGrid(props: FullWidthGridPropsType) {
+    const tasksObj = useSelector<RootStateType, TasksStateType>(state => state.tasks)
+
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -49,25 +48,13 @@ export function FullWidthGrid(props: FullWidthGridPropsType) {
                         addItem={props.addTodolist}/></Paper>
                 </Grid>
                 {props.todoLists.map(tl => {
-                    let tasksForTodolist = props.tasksObj[tl.id]
-                    if (tl.filter === 'active') {
-                        tasksForTodolist = tasksForTodolist.filter(t => !t.isDone)
-                    }
-                    if (tl.filter === 'completed') {
-                        tasksForTodolist = tasksForTodolist.filter(t => t.isDone)
-                    }
                     return (
                         <Grid key={tl.id} item style={{margin: '0'}} xs={12} sm={6} md={4}>
                             <Paper className={classes.paper}>
                                 <TodoList
                                     id={tl.id}
                                     title={tl.title}
-                                    tasks={tasksForTodolist}
-                                    removeTask={props.removeTask}
                                     changeFilter={props.changeFilter}
-                                    addTask={props.addTask}
-                                    changeTaskStatus={props.changeTaskStatus}
-                                    changeTaskTitle={props.changeTaskTitle}
                                     changeTodolistTitle={props.changeTodolistTitle}
                                     filter={tl.filter}
                                     removeTodoList={props.removeTodoList}/>

@@ -1,6 +1,6 @@
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../AppWithRedux";
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
+import {AddTodolistActionType, RemoveTodolistActionType, todoListsId1, todoListsId2} from "./todolists-reducer";
 
 export type RemoveTasksActionType = {
     type: 'REMOVE-TASK'
@@ -36,7 +36,9 @@ type ActionsTypes = RemoveTasksActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
 
-export const tasksReducer = (state: TasksStateType, action: ActionsTypes): TasksStateType => {
+const initialState: TasksStateType = {}
+
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionsTypes): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             const removeTasks = state[action.todolistId].filter(t => t.id !== action.taskId)
@@ -47,12 +49,12 @@ export const tasksReducer = (state: TasksStateType, action: ActionsTypes): Tasks
         case 'CHANGE-TASK-STATUS':
             const changeTaskStatusState = {...state}
             const changeStatusTask = changeTaskStatusState[action.todolistId].find(t => t.id === action.todolistTaskId)
-            if (changeStatusTask) changeStatusTask.isDone = false
+            if (changeStatusTask) changeStatusTask.isDone = !changeStatusTask.isDone
             return changeTaskStatusState
         case 'CHANGE-TASK-TITLE':
             const changeTaskTitleState = {...state}
-            const changeTitleTask = changeTaskTitleState[action.todolistId].find(t => t.id === action.todolistTaskId)
-            if (changeTitleTask) changeTitleTask.title = action.taskTitle
+            const changeTitleTask = changeTaskTitleState[action.todolistId]
+            changeTaskTitleState[action.todolistId] = changeTitleTask.map(t => t.id === action.todolistTaskId ? {...t, isDone: !t.isDone} : t)
             return changeTaskTitleState
         case 'ADD-TODOLIST':
             return {...state, [action.todolistId]: []}
