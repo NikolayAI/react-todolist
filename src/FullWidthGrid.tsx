@@ -4,9 +4,7 @@ import {AddItemForm} from "./AddItemForm";
 import {TodoList} from "./Todolist";
 import React from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {FilterValuesType, TasksStateType, TodoListType} from "./AppWithRedux";
-import {useSelector} from "react-redux";
-import {RootStateType} from "./state/store";
+import {FilterValuesType, TodoListType} from "./AppWithRedux";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,15 +27,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type FullWidthGridPropsType = {
     changeFilter: (todoListId: string, value: FilterValuesType) => void
-    changeTodolistTitle: (title: string, todoListId: string) => void
+    changeTodolistTitle: (todoListId: string, title: string) => void
     removeTodoList: (todolistId: string) => void
     addTodolist: (title: string) => void
     todoLists: TodoListType[]
 }
 
-export function FullWidthGrid(props: FullWidthGridPropsType) {
-    const tasksObj = useSelector<RootStateType, TasksStateType>(state => state.tasks)
-
+export const FullWidthGrid = React.memo((props: FullWidthGridPropsType) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -65,4 +61,4 @@ export function FullWidthGrid(props: FullWidthGridPropsType) {
             </Grid>
         </div>
     );
-}
+})

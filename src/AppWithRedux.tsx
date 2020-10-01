@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import {Container, Typography} from "@material-ui/core";
 import 'fontsource-roboto';
-import PersistentDrawerRight from "./PersistentDrawerRight";
 import {FullWidthGrid} from "./FullWidthGrid";
 import {
     addTodolistAC,
@@ -13,6 +12,7 @@ import {
 } from "./state/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "./state/store";
+import PersistentDrawerRight from "./PersistentDrawerRight";
 
 export type TaskType = {
     id: string
@@ -30,22 +30,22 @@ export type TasksStateType = {
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
 function AppWithRedux() {
-
+    console.log('AppWithRedux')
     const dispatch = useDispatch()
     const todoLists = useSelector<RootStateType, TodoListType[]>(state => state.todoLists)
 
-    const changeFilter = (todoListId: string, value: FilterValuesType) => {
+    const changeFilter = useCallback((todoListId: string, value: FilterValuesType) => {
         dispatch(changeTodolistFilterAC(todoListId, value))
-    }
-    const addTodolist = (title: string) => {
+    }, [changeTodolistFilterAC])
+    const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }
-    const removeTodoList = (todolistId: string) => {
+    }, [addTodolistAC])
+    const removeTodoList = useCallback((todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
-    }
-    const changeTodolistTitle = (todoListId: string, title: string) => {
+    }, [removeTodolistAC])
+    const changeTodolistTitle = useCallback((todoListId: string, title: string) => {
         dispatch(changeTodolistTitleAC(todoListId, title))
-    }
+    }, [changeTodolistTitleAC])
 
     return (
         <ThemeProvider theme={theme}>
