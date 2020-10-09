@@ -33,7 +33,7 @@ type FullWidthGridPropsType = {
     todoLists: TodoListType[]
 }
 
-export const FullWidthGrid = React.memo((props: FullWidthGridPropsType) => {
+export const TodolistContainer = React.memo((props: FullWidthGridPropsType) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>

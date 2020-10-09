@@ -5,7 +5,7 @@ import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import {Container, Typography} from "@material-ui/core";
 import 'fontsource-roboto';
 import PersistentDrawerRight from "./PersistentDrawerRight";
-import {FullWidthGrid} from "./FullWidthGrid";
+import {TodolistContainer} from "./TodolistContainer";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
@@ -84,17 +84,12 @@ function AppWithReducer() {
                 <div className="App" style={{overflowX: 'hidden'}}>
                     <PersistentDrawerRight/>
                     <Container>
-                        <FullWidthGrid
-                            // removeTask={removeTask}
+                        <TodolistContainer
                             changeFilter={changeFilter}
-                            // addTask={addTask}
-                            // changeTaskStatus={changeStatus}
-                            // changeTaskTitle={changeTaskTitle}
                             changeTodolistTitle={changeTodolistTitle}
                             removeTodoList={removeTodoList}
                             addTodolist={addTodolist}
                             todoLists={todoLists}
-                            // tasksObj={tasksObj}
                         />
                     </Container>
                 </div>

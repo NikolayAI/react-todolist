@@ -3,7 +3,7 @@ import './App.css';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import {Container, Typography} from "@material-ui/core";
 import 'fontsource-roboto';
-import {FullWidthGrid} from "./FullWidthGrid";
+import {TodolistContainer} from "./TodolistContainer";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
@@ -53,7 +53,7 @@ function AppWithRedux() {
                 <div className="App" style={{overflowX: 'hidden'}}>
                     <PersistentDrawerRight/>
                     <Container>
-                        <FullWidthGrid
+                        <TodolistContainer
                             changeFilter={changeFilter}
                             changeTodolistTitle={changeTodolistTitle}
                             removeTodoList={removeTodoList}
