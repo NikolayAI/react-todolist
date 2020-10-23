@@ -4,7 +4,7 @@ import {AddItemForm} from "./AddItemForm";
 import {TodoList} from "./Todolist";
 import React from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {FilterValuesType, TodoListType} from "./AppWithRedux";
+import {FilterValuesType, TodolistDomainType} from "./state/todolists-reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +30,7 @@ type FullWidthGridPropsType = {
     changeTodolistTitle: (todoListId: string, title: string) => void
     removeTodoList: (todolistId: string) => void
     addTodolist: (title: string) => void
-    todoLists: TodoListType[]
+    todoLists: TodolistDomainType[]
 }
 
 export const TodolistContainer = React.memo((props: FullWidthGridPropsType) => {

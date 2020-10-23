@@ -1,13 +1,14 @@
-import React, {useCallback} from "react";
-import {FilterValuesType, TaskType} from "./AppWithRedux";
+import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, ButtonGroup, Grid, IconButton} from '@material-ui/core';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "./state/store";
-import {addTaskAC} from "./state/tasks-reducer";
+import {addTaskAC, addTaskTC, fetchTasksTC} from "./state/tasks-reducer";
 import {Task} from "./Task";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
+import {FilterValuesType} from "./state/todolists-reducer";
 
 type PropsType = {
     id: string
@@ -19,13 +20,14 @@ type PropsType = {
 }
 
 export const TodoList = React.memo((props: PropsType) => {
-    console.log('TodoList')
     const dispatch = useDispatch()
     const tasks = useSelector<RootStateType, TaskType[]>(state => state.tasks[props.id])
 
+    useEffect(() => {dispatch(fetchTasksTC(props.id))}, [])
+
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskAC(title, props.id))
-    }, [addTaskAC, props.id])
+        dispatch(addTaskTC(props.id, title))
+    }, [addTaskTC, props.id])
 
     const onAllClickHandler = useCallback(() => {
         props.changeFilter(props.id, 'all')
@@ -50,10 +52,10 @@ export const TodoList = React.memo((props: PropsType) => {
 
     let tasksForTodolist = tasks
     if (props.filter === 'active') {
-        tasksForTodolist = tasksForTodolist.filter(t => !t.isDone)
+        tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.New)
     }
     if (props.filter === 'completed') {
-        tasksForTodolist = tasksForTodolist.filter(t => t.isDone)
+        tasksForTodolist = tasksForTodolist.filter(t => t.status === TaskStatuses.Completed)
     }
 
     return (
@@ -73,7 +75,7 @@ export const TodoList = React.memo((props: PropsType) => {
                         return <Task taskId={t.id}
                                      todolistId={props.id}
                                      taskTitle={t.title}
-                                     isDone={t.isDone}
+                                     status={t.status}
                                      key={t.id}/>
                     })
                 }

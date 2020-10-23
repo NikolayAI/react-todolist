@@ -1,9 +1,8 @@
 import React from "react";
 import {Task} from "./Task";
 import {action} from "@storybook/addon-actions";
-import {Provider} from "react-redux";
-import {store} from "./state/store";
 import {ReduxStoreProviderDecorator} from "./stories/ReduxStoreProviderDecorator";
+import {TaskStatuses} from "./api/todolists-api";
 
 export default {
     title: 'Task Component',
@@ -18,8 +17,8 @@ const changeTaskCallback = action('Task Removed')
 export const TaskBaseExample = (props: any) => {
     return (
         <>
-            <Task taskId={'1'} todolistId={'todolist1'} taskTitle={'CSS'} isDone={true}/>
-            <Task taskId={'2'} todolistId={'todolist2'} taskTitle={'JS'} isDone={false}/>
+            <Task taskId={'1'} todolistId={'todolist1'} taskTitle={'CSS'} status={TaskStatuses.Completed}/>
+            <Task taskId={'2'} todolistId={'todolist2'} taskTitle={'JS'} status={TaskStatuses.New}/>
         </>
     )
 }
