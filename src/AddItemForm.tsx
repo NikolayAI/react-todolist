@@ -4,20 +4,20 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
 
-export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
-    console.log('AddItemForm')
+export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormPropsType) => {
     let [title, setTitle] = useState<string>('')
     let [error, setError] = useState<string>('')
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
     const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
         error && setError('')
-        e.ctrlKey && e.key === 'Enter' && addItem()
+        e.ctrlKey && e.key === 'Enter' && addItemHandler()
     }
-    const addItem = () => {
-        title.trim() === '' ? setError('Field is required') : props.addItem(title.trim())
+    const addItemHandler = () => {
+        title.trim() === '' ? setError('Field is required') : addItem(title.trim())
         setTitle('')
     }
 
@@ -27,14 +27,23 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
             direction="row"
             justify="center"
             alignItems="center">
-            <TextField error={error === 'Field is required'}
+            <TextField
+                disabled={disabled}
+                error={error === 'Field is required'}
                 id="standard-basic"
                 label="Write title"
                 value={title}
                 onChange={onChangeHandler}
                 onKeyUp={onKeyUpHandler}
                 className={error ? 'error' : ''}/>
-            <Button size={"large"} variant="contained" color="secondary" onClick={addItem}><PostAddIcon/></Button>
+            <Button
+                disabled={disabled}
+                size={"large"}
+                variant="contained"
+                color="secondary"
+                onClick={addItemHandler}>
+                <PostAddIcon/>
+            </Button>
             {error && <div className={'error-message'}>{error}</div>}
         </Grid>
     )

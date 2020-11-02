@@ -31,6 +31,7 @@ type FullWidthGridPropsType = {
     removeTodoList: (todolistId: string) => void
     addTodolist: (title: string) => void
     todoLists: TodolistDomainType[]
+    demo?: boolean
 }
 
 export const TodolistContainer = React.memo((props: FullWidthGridPropsType) => {
@@ -48,11 +49,10 @@ export const TodolistContainer = React.memo((props: FullWidthGridPropsType) => {
                         <Grid key={tl.id} item style={{margin: '0'}} xs={12} sm={6} md={4}>
                             <Paper className={classes.paper}>
                                 <TodoList
-                                    id={tl.id}
-                                    title={tl.title}
+                                    todolist={tl}
+                                    demo={props.demo}
                                     changeFilter={props.changeFilter}
                                     changeTodolistTitle={props.changeTodolistTitle}
-                                    filter={tl.filter}
                                     removeTodoList={props.removeTodoList}/>
                             </Paper>
                         </Grid>

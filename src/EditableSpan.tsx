@@ -14,8 +14,10 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
         props.onChange(title)
     }
     const offKeyPressEditModeHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        e.key === 'Enter' && setEditMode(false)
-        props.onChange(title)
+        if (e.key === 'Enter') {
+            setEditMode(false)
+            props.onChange(title)
+        }
     }
     const onEditModeHandler = () => {
         setTitle(props.title)
@@ -25,7 +27,8 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
 
     return (
         editMode
-            ? <input autoFocus onBlur={offEditModeHandler}
+            ? <input autoFocus
+                     onBlur={offEditModeHandler}
                      onKeyPress={offKeyPressEditModeHandler}
                      value={title}
                      onChange={onChangeTitleHandler}/>
