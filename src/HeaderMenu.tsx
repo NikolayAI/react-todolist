@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import {makeStyles, useTheme, Theme, createStyles} from '@material-ui/core/styles'
+import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -19,7 +19,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import {useSelector} from 'react-redux'
-import {RootStateType} from './state/store'
+import {GlobalStateType} from './state/store'
+import {Button} from '@material-ui/core'
 
 const drawerWidth = 240
 
@@ -82,17 +83,27 @@ const useStyles1 = makeStyles((theme: Theme) =>
     }),
 )
 
-const PersistentDrawerRight = React.memo(() => {
+
+type HeaderMenuPropsType = {
+    handleLogout: () => void
+}
+
+export const HeaderMenu: React.FC<HeaderMenuPropsType> = React.memo(({handleLogout}) => {
     const classes = useStyles1()
     const theme1 = useTheme()
     const [open, setOpen] = React.useState(false)
-    const status = useSelector<RootStateType>(state => state.app.status)
+    const status = useSelector<GlobalStateType>(state => state.app.status)
+    const isLoggedIn = useSelector<GlobalStateType>(state => state.auth.isLoggedIn)
+
 
     const handleDrawerOpen = () => {
         setOpen(true)
     }
     const handleDrawerClose = () => {
         setOpen(false)
+    }
+    const logoutHandler = () => {
+        handleLogout()
     }
 
     return (<>
@@ -108,6 +119,10 @@ const PersistentDrawerRight = React.memo(() => {
                         <Typography variant="h6" noWrap className={classes.title}>
                             Todolist
                         </Typography>
+                        {isLoggedIn && <Button onClick={logoutHandler}
+                                               variant={'contained'}
+                                               color={'secondary'}>Logout</Button>
+                        }
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -164,5 +179,3 @@ const PersistentDrawerRight = React.memo(() => {
         </>
     )
 })
-
-export default PersistentDrawerRight

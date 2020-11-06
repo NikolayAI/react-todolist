@@ -4,7 +4,7 @@ import {EditableSpan} from "./EditableSpan"
 import {Button, ButtonGroup, Grid, IconButton} from '@material-ui/core'
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation'
 import {useDispatch, useSelector} from "react-redux"
-import {RootStateType} from "./state/store"
+import {GlobalStateType} from "./state/store"
 import {addTaskTC, fetchTasksTC} from "./state/tasks-reducer"
 import {Task} from "./Task"
 import {TaskStatuses, TaskType} from "./api/todolists-api"
@@ -20,16 +20,16 @@ type PropsType = {
 
 export const TodoList = React.memo(({demo = false, ...props}: PropsType) => {
     const dispatch = useDispatch()
-    const tasks = useSelector<RootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
+    const tasks = useSelector<GlobalStateType, TaskType[]>(state => state.tasks[props.todolist.id])
 
     useEffect(() => {
         if (demo) return
         dispatch(fetchTasksTC(props.todolist.id))
-    }, [])
+    }, [dispatch])
 
     const addTask = useCallback((title: string) => {
         dispatch(addTaskTC(props.todolist.id, title))
-    }, [addTaskTC, props.todolist.id])
+    }, [dispatch, props.todolist.id])
 
     const onAllClickHandler = useCallback(() => {
             props.changeFilter(props.todolist.id, 'all')

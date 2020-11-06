@@ -17,15 +17,15 @@ export const Task = React.memo((props: TaskPropsType) => {
 
     const removeTask = useCallback(() => {
         dispatch(removeTaskTC(props.todolistId, props.taskId))
-    }, [removeTaskTC, props.taskId, props.todolistId])
+    }, [dispatch, props.taskId, props.todolistId])
 
     const onChangeStatusHandler =  useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(updateTaskTC(props.todolistId, props.taskId, {status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New}))
-    }, [updateTaskTC, props.taskId, props.todolistId])
+    }, [dispatch, props.taskId, props.todolistId])
 
     const onChangeTitleHandler =  useCallback((title: string) => {
         dispatch(updateTaskTC(props.todolistId, props.taskId, {title}))
-    }, [updateTaskTC, props.todolistId, props.taskId])
+    }, [dispatch, props.todolistId, props.taskId])
 
     return (
         <div key={props.taskId} className={props.status === TaskStatuses.Completed ? 'is-done' : ''}

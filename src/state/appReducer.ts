@@ -1,33 +1,47 @@
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+import {InferActionsTypes} from './store'
+import {Dispatch} from 'redux'
+import {authAPI} from '../api/todolists-api'
+import {actions as authActions} from '../features/Login/authReducer'
 
-export type InitialStateType = {
-    // происходит ли сейчас взаимодействие с сервером
-    status: RequestStatusType
-    error: string | null
+
+const initialState = {
+    status: 'idle' as RequestStatusType,
+    error: null as string | null,
+    isInitialized: false,
 }
 
-const initialState: InitialStateType = {
-    status: 'idle',
-    error: null,
-}
-
-export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+export const appReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
-        case 'APP/SET_STATUS':
+        case 'todo/app/SET_STATUS':
             return {...state, status: action.status}
-        case 'APP/SET_ERROR':
+        case 'todo/app/SET_ERROR':
             return {...state, error: action.error}
+        case 'todo/app/SET_IS_INITIALIZED':
+            return {...state, isInitialized: action.value}
         default:
             return state
     }
 }
 
-export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET_STATUS', status} as const)
-export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET_ERROR', error} as const)
 
-export type AppSetErrorActionType = ReturnType<typeof setAppErrorAC>
-export type AppSetStatusActionType = ReturnType<typeof setAppStatusAC>
+export const actions = {
+    setAppStatusAC: (status: RequestStatusType) => ({type: 'todo/app/SET_STATUS', status} as const),
+    setAppErrorAC: (error: string | null) => ({type: 'todo/app/SET_ERROR', error} as const),
+    setAppInitializedAC: (value: boolean) => ({type: 'todo/app/SET_IS_INITIALIZED', value} as const),
+}
 
-type ActionsType =
-    | AppSetErrorActionType
-    | AppSetStatusActionType
+
+export const initializedAppTC = () => (dispatch: Dispatch) => {
+    authAPI.me()
+        .then(data => {
+            if (!data.resultCode) {
+                dispatch(authActions.setIsLoggedInAC(true))
+            }
+            dispatch(actions.setAppInitializedAC(true))
+        })
+}
+
+
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+type InitialStateType = typeof initialState
+type ActionsType = InferActionsTypes<typeof actions>
