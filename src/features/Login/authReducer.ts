@@ -29,7 +29,9 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
             if (!data.resultCode) {
                 dispatch(actions.setIsLoggedInAC(true))
                 dispatch(appActions.setAppStatusAC('succeeded'))
-            } else {handleServerAppError(data, dispatch)}
+            } else {
+                handleServerAppError(data, dispatch)
+            }
         })
         .catch(error => handleServerNetworkError(error, dispatch))
 }
@@ -41,7 +43,9 @@ export const logoutTC = () => (dispatch: Dispatch) => {
             if (!data.resultCode) {
                 dispatch(actions.setIsLoggedInAC(false))
                 dispatch(appActions.setAppStatusAC('succeeded'))
-            } else {handleServerAppError(data, dispatch)}
+            } else {
+                handleServerAppError(data, dispatch)
+            }
         })
         .catch(error => handleServerNetworkError(error, dispatch))
 }

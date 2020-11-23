@@ -13,7 +13,7 @@ import {useFormik} from 'formik'
 import {loginTC} from './authReducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {GlobalStateType} from '../../state/store'
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 
 export const Login = () => {
