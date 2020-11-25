@@ -28,7 +28,6 @@ const AppWithRedux: React.FC<AppWithReduxPropsType> = ({demo = false}) => {
 
     const dispatch = useDispatch()
     const isInitialized = useSelector<GlobalStateType>(state => state.app.isInitialized)
-    const isLoggedIn = useSelector<GlobalStateType>(state => state.auth.isLoggedIn)
 
 
     useEffect(() => {
