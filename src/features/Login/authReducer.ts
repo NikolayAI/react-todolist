@@ -3,11 +3,14 @@ import {Dispatch} from 'redux'
 import {actions as appActions} from '../../state/appReducer'
 import {authAPI, LoginParamsType} from '../../api/todolists-api'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/errorUtils'
+import {createSlice} from '@reduxjs/toolkit'
 
 
 const initialState = {
     isLoggedIn: false,
 }
+
+const authSlice = createSlice
 
 export const authReducer = (state = initialState, action: ActionsType): initialStateType => {
     switch (action.type) {
