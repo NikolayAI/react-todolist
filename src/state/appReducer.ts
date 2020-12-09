@@ -2,6 +2,7 @@ import {InferActionsTypes} from './store'
 import {Dispatch} from 'redux'
 import {authAPI} from '../api/todolists-api'
 import {actions as authActions} from '../features/Login/authReducer'
+import {createSlice} from '@reduxjs/toolkit'
 
 
 const initialState = {
@@ -9,6 +10,8 @@ const initialState = {
     error: null as string | null,
     isInitialized: false,
 }
+
+const appSlice = createSlice
 
 export const appReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
