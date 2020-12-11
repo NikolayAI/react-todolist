@@ -1,6 +1,6 @@
 import { InferActionsTypes } from "./store";
 import { Dispatch } from "redux";
-import { authAPI } from "../api/todolists-api";
+import { authAPI } from "../api/todolistsApi";
 import { actions as authActions } from "./authReducer";
 import { createSlice } from "@reduxjs/toolkit";
 

@@ -8,9 +8,9 @@ import {
   TaskPriorities,
   TaskStatuses,
   TaskType,
-  todolistsAPI,
+  todolistsApi,
   UpdateTaskModelType,
-} from "../api/todolists-api";
+} from "../api/todolistsApi";
 import { Dispatch } from "redux";
 import { GlobalStateType } from "./store";
 import { actions as appActions } from "./appReducer";
@@ -125,7 +125,7 @@ export const setTasksAC = (
 
 export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
   dispatch(appActions.setAppStatusAC("loading"));
-  todolistsAPI.getTasks(todolistId).then((res) => {
+  todolistsApi.getTasks(todolistId).then((res) => {
     dispatch(setTasksAC(res.data.items, todolistId));
     dispatch(appActions.setAppStatusAC("succeeded"));
   });
@@ -134,7 +134,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
 export const removeTaskTC = (todolistId: string, taskId: string) => (
   dispatch: Dispatch<ActionsTypes>
 ) => {
-  todolistsAPI
+  todolistsApi
     .deleteTask(todolistId, taskId)
     .then(
       (res) =>
@@ -146,7 +146,7 @@ export const addTaskTC = (todolistId: string, title: string) => (
   dispatch: Dispatch
 ) => {
   dispatch(appActions.setAppStatusAC("loading"));
-  todolistsAPI
+  todolistsApi
     .createTask(todolistId, title)
     .then((res) => {
       if (!res.data.resultCode) {
@@ -188,7 +188,7 @@ export const updateTaskTC = (
     deadline: task.deadline,
     ...domainModel,
   };
-  todolistsAPI
+  todolistsApi
     .updateTask(todolistId, taskId, apiModel)
     .then((res) => {
       if (!res.data.resultCode) {

@@ -11,7 +11,7 @@ import { GlobalStateType } from "./state/store";
 import { initializedAppTC } from "./state/appReducer";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { CustomizedSnackbars } from "./components/ErrorSnackbar/ErrorSnackbar";
-import { TaskType } from "./api/todolists-api";
+import { TaskType } from "./api/todolistsApi";
 import { BrowserRouter, Route } from "react-router-dom";
 import { logoutTC } from "./state/authReducer";
 import style from "./App.module.css";

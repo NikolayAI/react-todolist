@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { Checkbox, IconButton } from "@material-ui/core";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import { TaskStatuses } from "../../api/todolists-api";
+import { TaskStatuses } from "../../api/todolistsApi";
 
 type TaskPropsType = {
   taskId: string;

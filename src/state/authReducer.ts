@@ -1,7 +1,7 @@
 import { InferActionsTypes } from "./store";
 import { Dispatch } from "redux";
 import { actions as appActions } from "./appReducer";
-import { authAPI, LoginParamsType } from "../api/todolists-api";
+import { authAPI, LoginParamsType } from "../api/todolistsApi";
 import {
   handleServerAppError,
   handleServerNetworkError,

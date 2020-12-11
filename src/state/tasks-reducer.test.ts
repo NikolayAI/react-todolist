@@ -11,7 +11,7 @@ import {
   setTodolistsAC,
 } from "./todolists-reducer";
 import { TasksStateType } from "../App";
-import { TaskPriorities, TaskStatuses } from "../api/todolists-api";
+import { TaskPriorities, TaskStatuses } from "../api/todolistsApi";
 
 let startState: TasksStateType;
 

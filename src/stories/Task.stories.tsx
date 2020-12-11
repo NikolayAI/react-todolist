@@ -2,7 +2,7 @@ import React from "react";
 import { Task } from "../components/Task/Task";
 import { action } from "@storybook/addon-actions";
 import { ReduxStoreProviderDecorator } from "./ReduxStoreProviderDecorator";
-import { TaskStatuses } from "../api/todolists-api";
+import { TaskStatuses } from "../api/todolistsApi";
 
 export default {
   title: "Task Component",

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GlobalStateType } from "../../state/store";
 import { addTaskTC, fetchTasksTC } from "../../state/tasks-reducer";
 import { Task } from "../Task/Task";
-import { TaskStatuses, TaskType } from "../../api/todolists-api";
+import { TaskStatuses, TaskType } from "../../api/todolistsApi";
 import {
   FilterValuesType,
   TodolistDomainType,

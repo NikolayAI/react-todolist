@@ -4,7 +4,7 @@ import { tasksReducer } from "../state/tasks-reducer";
 import { todolistsReducer } from "../state/todolists-reducer";
 import { v1 } from "uuid";
 import { Provider } from "react-redux";
-import { TaskStatuses } from "../api/todolists-api";
+import { TaskStatuses } from "../api/todolistsApi";
 import { appReducer } from "../state/appReducer";
 import thunkMiddleware from "redux-thunk";
 import { authReducer } from "../state/authReducer";
