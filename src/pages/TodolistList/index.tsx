@@ -12,16 +12,16 @@ import {
   FilterValuesType,
   removeTodolistTC,
   TodolistDomainType,
-} from "../../state/todolists-reducer";
+} from "../../store/todolists-reducer";
 import { useDispatch, useSelector } from "react-redux";
-import { GlobalStateType } from "../../state/store";
+import { GlobalStateType } from "../../store/store";
 import { Redirect } from "react-router-dom";
 
 type TodolistContainerPropsType = {
   demo?: boolean;
 };
 
-export const TodolistContainer: React.FC<TodolistContainerPropsType> = React.memo(
+export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
   ({ demo }) => {
     const classes = useStyles();
     const dispatch = useDispatch();

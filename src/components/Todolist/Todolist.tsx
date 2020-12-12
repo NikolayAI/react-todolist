@@ -4,14 +4,14 @@ import { EditableSpan } from "../EditableSpan/EditableSpan";
 import { Button, ButtonGroup, Grid, IconButton } from "@material-ui/core";
 import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
 import { useDispatch, useSelector } from "react-redux";
-import { GlobalStateType } from "../../state/store";
-import { addTaskTC, fetchTasksTC } from "../../state/tasks-reducer";
+import { GlobalStateType } from "../../store/store";
+import { addTaskTC, fetchTasksTC } from "../../store/tasks-reducer";
 import { Task } from "../Task/Task";
 import { TaskStatuses, TaskType } from "../../api/todolistsApi";
 import {
   FilterValuesType,
   TodolistDomainType,
-} from "../../state/todolists-reducer";
+} from "../../store/todolists-reducer";
 
 type PropsType = {
   todolist: TodolistDomainType;

@@ -3,17 +3,17 @@ import "./App.module.css";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { Container, Typography } from "@material-ui/core";
 import "fontsource-roboto";
-import { TodolistContainer } from "./pages/Todolist/TodolistContainer";
+import { TodolistList } from "./pages/TodolistList";
 import { useDispatch, useSelector } from "react-redux";
 import { HeaderMenu } from "./components/HeaderMenu/HeaderMenu";
-import { Login } from "./pages/Login/Login";
-import { GlobalStateType } from "./state/store";
-import { initializedAppTC } from "./state/appReducer";
+import { Login } from "./pages/Login";
+import { GlobalStateType } from "./store/store";
+import { initializedAppTC } from "./store/appReducer";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { CustomizedSnackbars } from "./components/ErrorSnackbar/ErrorSnackbar";
 import { TaskType } from "./api/todolistsApi";
 import { BrowserRouter, Route } from "react-router-dom";
-import { logoutTC } from "./state/authReducer";
+import { logoutTC } from "./store/authReducer";
 import style from "./App.module.css";
 
 export type TasksStateType = {
@@ -55,7 +55,7 @@ export const App: React.FC<AppPropsType> = ({ demo = false }) => {
               <Route
                 exact
                 path={"/"}
-                render={() => <TodolistContainer demo={demo} />}
+                render={() => <TodolistList demo={demo} />}
               />
               <Route path={"/login/"} render={() => <Login />} />
             </Container>

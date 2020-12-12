@@ -176,7 +176,7 @@ export const updateTaskTC = (
   const state = getState();
   const task = state.tasks[todolistId].find((t) => t.id === taskId);
   if (!task) {
-    console.warn("task not found in the state");
+    console.warn("task not found in the store");
     return;
   }
   const apiModel: UpdateTaskModelType = {

@@ -44,7 +44,7 @@ test("correct todolist should be removed", () => {
 
 test("correct todolist should be added", () => {
   const todolist: TodolistType = {
-    title: "New Todolist",
+    title: "New TodolistList",
     order: 0,
     addedDate: "",
     id: "anyId",
@@ -57,7 +57,7 @@ test("correct todolist should be added", () => {
 });
 
 test("correct todolist should change its name", () => {
-  let newTodolistTitle = "New Todolist";
+  let newTodolistTitle = "New TodolistList";
 
   const endState = todolistsReducer(
     startState,
@@ -80,7 +80,7 @@ test("correct filter of todolist should be changed", () => {
   expect(endState[1].filter).toBe(newFilter);
 });
 
-test("todolists should be added to the state", () => {
+test("todolists should be added to the store", () => {
   const endState = todolistsReducer([], setTodolistsAC(startState));
 
   expect(endState.length).toBe(2);

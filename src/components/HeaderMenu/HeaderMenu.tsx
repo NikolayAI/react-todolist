@@ -24,7 +24,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { useSelector } from "react-redux";
-import { GlobalStateType } from "../../state/store";
+import { GlobalStateType } from "../../store/store";
 import { Button } from "@material-ui/core";
 
 type HeaderMenuPropsType = {

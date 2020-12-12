@@ -1,4 +1,4 @@
-import { actions } from "../state/appReducer";
+import { actions } from "../store/appReducer";
 import { ResponseType } from "../api/todolistsApi";
 import { Dispatch } from "redux";
 

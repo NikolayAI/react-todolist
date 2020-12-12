@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { removeTaskTC, updateTaskTC } from "../../state/tasks-reducer";
+import { removeTaskTC, updateTaskTC } from "../../store/tasks-reducer";
 import React, { useCallback } from "react";
 import { Checkbox, IconButton } from "@material-ui/core";
 import { EditableSpan } from "../EditableSpan/EditableSpan";

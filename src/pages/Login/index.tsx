@@ -10,9 +10,9 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useFormik } from "formik";
-import { loginTC } from "../../state/authReducer";
+import { loginTC } from "../../store/authReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { GlobalStateType } from "../../state/store";
+import { GlobalStateType } from "../../store/store";
 import { Redirect } from "react-router-dom";
 
 export const Login: React.FC = () => {
