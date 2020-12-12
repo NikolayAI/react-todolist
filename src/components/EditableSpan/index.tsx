@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 type EditableSpanPropsType = {
-  title: string;
-  onChange: (title: string) => void;
-};
+  title: string
+  onChange: (title: string) => void
+}
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
   ({ title, onChange }) => {
-    let [editMode, setEditMode] = useState(false);
-    let [editableTitle, setEditableTitle] = useState("");
+    let [editMode, setEditMode] = useState(false)
+    let [editableTitle, setEditableTitle] = useState('')
 
     const offEditModeHandler = () => {
-      setEditMode(false);
-      onChange(editableTitle);
-    };
+      setEditMode(false)
+      onChange(editableTitle)
+    }
 
     const offKeyPressEditModeHandler = (
       e: React.KeyboardEvent<HTMLInputElement>
     ) => {
-      if (e.key === "Enter") {
-        setEditMode(false);
-        onChange(editableTitle);
+      if (e.key === 'Enter') {
+        setEditMode(false)
+        onChange(editableTitle)
       }
-    };
+    }
 
     const onEditModeHandler = () => {
-      setEditableTitle(title);
-      setEditMode(true);
-    };
+      setEditableTitle(title)
+      setEditMode(true)
+    }
 
     const onChangeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEditableTitle(e.currentTarget.value);
-    };
+      setEditableTitle(e.currentTarget.value)
+    }
 
     return editMode ? (
       <input
@@ -43,11 +43,11 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
       />
     ) : (
       <span
-        style={{ wordWrap: "break-word" }}
+        style={{ wordWrap: 'break-word' }}
         onDoubleClick={onEditModeHandler}
       >
         {title}
       </span>
-    );
+    )
   }
-);
+)
