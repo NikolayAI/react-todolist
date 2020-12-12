@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Checkbox,
   FormControl,
@@ -8,42 +8,42 @@ import {
   TextField,
   Button,
   Grid,
-} from "@material-ui/core";
-import { useFormik } from "formik";
-import { loginTC } from "../../store/authReducer";
-import { useDispatch, useSelector } from "react-redux";
-import { GlobalStateType } from "../../store/store";
-import { Redirect } from "react-router-dom";
+} from '@material-ui/core'
+import { useFormik } from 'formik'
+import { loginTC } from '../../store/authReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { GlobalStateType } from '../../store/store'
+import { Redirect } from 'react-router-dom'
 
 export const Login: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const isLoggedIn = useSelector<GlobalStateType>(
     (state) => state.auth.isLoggedIn
-  );
+  )
 
   const formik = useFormik({
     validate: (values) => {
       if (!values.email) {
-        return { email: "email is required" };
+        return { email: 'email is required' }
       }
       if (!values.password) {
-        return { password: "password is required" };
+        return { password: 'password is required' }
       }
     },
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       rememberMe: false,
     },
     onSubmit: (values) => {
-      dispatch(loginTC(values));
+      dispatch(loginTC(values))
     },
-  });
+  })
 
-  if (isLoggedIn) return <Redirect to={"/"} />;
+  if (isLoggedIn) return <Redirect to={'/'} />
 
   return (
-    <Grid container justify="center">
+    <Grid container justify='center'>
       <Grid item xs={4}>
         <form onSubmit={formik.handleSubmit}>
           <FormControl>
@@ -51,9 +51,9 @@ export const Login: React.FC = () => {
               <p>
                 To log in get registered
                 <a
-                  href={"https://social-network.samuraijs.com/"}
-                  target={"_blank"}
-                  rel="noopener noreferrer"
+                  href={'https://social-network.samuraijs.com/'}
+                  target={'_blank'}
+                  rel='noopener noreferrer'
                 >
                   here
                 </a>
@@ -64,30 +64,30 @@ export const Login: React.FC = () => {
             </FormLabel>
             <FormGroup>
               <TextField
-                label="email"
-                margin="normal"
-                {...formik.getFieldProps("email")}
+                label='email'
+                margin='normal'
+                {...formik.getFieldProps('email')}
               />
               {formik.errors.email ? <div>{formik.errors.email}</div> : null}
               <TextField
-                type="password"
-                label="password"
-                margin="normal"
-                {...formik.getFieldProps("password")}
+                type='password'
+                label='password'
+                margin='normal'
+                {...formik.getFieldProps('password')}
               />
               {formik.errors.password ? (
                 <div>{formik.errors.password}</div>
               ) : null}
               <FormControlLabel
-                label={"Remember me"}
+                label={'Remember me'}
                 control={
                   <Checkbox
-                    {...formik.getFieldProps("rememberMe")}
+                    {...formik.getFieldProps('rememberMe')}
                     checked={formik.values.rememberMe}
                   />
                 }
               />
-              <Button type={"submit"} variant={"contained"} color={"primary"}>
+              <Button type={'submit'} variant={'contained'} color={'primary'}>
                 Login
               </Button>
             </FormGroup>
@@ -95,5 +95,5 @@ export const Login: React.FC = () => {
         </form>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
