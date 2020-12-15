@@ -1,13 +1,8 @@
 import {
-    addTodolistAC,
-    changeTodolistEntityStatusAC,
-    changeTodolistFilterAC,
-    changeTodolistTitleAC,
     FilterValuesType,
-    removeTodolistAC,
-    setTodolistsAC,
     TodolistDomainType,
     todolistsReducer,
+    todolistActions,
 } from './todolists-reducer'
 import { v1 } from 'uuid'
 import { RequestStatusType } from './appReducer'
@@ -36,7 +31,10 @@ const startState: Array<TodolistDomainType> = [
 ]
 
 test('correct todolist should be removed', () => {
-    const endState = todolistsReducer(startState, removeTodolistAC(todolistId1))
+    const endState = todolistsReducer(
+        startState,
+        todolistActions.removeTodolist(todolistId1)
+    )
 
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(todolistId2)
@@ -50,7 +48,7 @@ test('correct todolist should be added', () => {
         id: 'anyId',
     }
 
-    const endState = todolistsReducer(startState, addTodolistAC(todolist))
+    const endState = todolistsReducer(startState, todolistActions.addTodolist(todolist))
 
     expect(endState.length).toBe(3)
     expect(endState[0].title).toBe(todolist.title)
@@ -61,7 +59,7 @@ test('correct todolist should change its name', () => {
 
     const endState = todolistsReducer(
         startState,
-        changeTodolistTitleAC(todolistId2, newTodolistTitle)
+        todolistActions.changeTodolistTitle(todolistId2, newTodolistTitle)
     )
 
     expect(endState[0].title).toBe('What to learn')
@@ -73,7 +71,7 @@ test('correct filter of todolist should be changed', () => {
 
     const endState = todolistsReducer(
         startState,
-        changeTodolistFilterAC(todolistId2, newFilter)
+        todolistActions.changeTodolistFilter(todolistId2, newFilter)
     )
 
     expect(endState[0].filter).toBe('all')
@@ -81,7 +79,7 @@ test('correct filter of todolist should be changed', () => {
 })
 
 test('todolists should be added to the reducers', () => {
-    const endState = todolistsReducer([], setTodolistsAC(startState))
+    const endState = todolistsReducer([], todolistActions.setTodolists(startState))
 
     expect(endState.length).toBe(2)
 })
@@ -89,7 +87,7 @@ test('todolists should be added to the reducers', () => {
 test('correct entity status of todolist should be changed', () => {
     let newStatus: RequestStatusType = 'loading'
 
-    const action = changeTodolistEntityStatusAC(todolistId2, newStatus)
+    const action = todolistActions.changeTodolistEntityStatus(todolistId2, newStatus)
 
     const endState = todolistsReducer(startState, action)
 

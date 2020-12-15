@@ -6,18 +6,13 @@ import { TodolistList } from '../pages/TodolistList'
 import { useDispatch, useSelector } from 'react-redux'
 import { HeaderMenu } from '../components/HeaderMenu'
 import { Login } from '../pages/Login'
-import { initializedAppTC } from '../redux/reducers/appReducer'
+import { initializedApp } from '../redux/reducers/appReducer'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { ErrorSnackbar } from '../components/ErrorSnackbar'
 import { BrowserRouter, Route } from 'react-router-dom'
-import { logoutTC } from '../redux/reducers/authReducer'
+import { logout } from '../redux/reducers/authReducer'
 import style from './index.module.css'
-import { RootStateType } from '../redux/reducers/roootReducer'
-import { TaskType } from '../api/api'
-
-export type TasksStateType = {
-    [key: string]: TaskType[]
-}
+import { getInitialized } from '../redux/selectors/appSelectors'
 
 type AppPropsType = {
     demo?: boolean
@@ -25,13 +20,13 @@ type AppPropsType = {
 
 export const App: React.FC<AppPropsType> = ({ demo = false }) => {
     const dispatch = useDispatch()
-    const isInitialized = useSelector<RootStateType>((state) => state.app.isInitialized)
+    const isInitialized = useSelector(getInitialized)
 
     useEffect(() => {
-        dispatch(initializedAppTC())
+        dispatch(initializedApp())
     }, [dispatch])
 
-    const onLogout = () => dispatch(logoutTC())
+    const onLogout = () => dispatch(logout())
 
     if (!isInitialized) {
         return (

@@ -5,17 +5,17 @@ import { AddItemForm } from '../../components/AddItemForm'
 import { Todolist } from '../../components/Todolist'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
-    addTodolistTC,
-    changeTodolistFilterAC,
-    changeTodolistTitleTC,
-    fetchTodolistsTC,
+    addTodolist,
+    changeTodolistTitle,
+    fetchTodolists,
     FilterValuesType,
-    removeTodolistTC,
-    TodolistDomainType,
+    removeTodolist,
+    todolistActions,
 } from '../../redux/reducers/todolists-reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { RootStateType } from '../../redux/reducers/roootReducer'
+import { getIsLoggedIn } from '../../redux/selectors/authSelector'
+import { getTodoLists } from '../../redux/selectors/todolistsSelectors'
 
 type TodolistContainerPropsType = {
     demo?: boolean
@@ -25,40 +25,38 @@ export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
     ({ demo }) => {
         const classes = useStyles()
         const dispatch = useDispatch()
-        const todoLists = useSelector<RootStateType, TodolistDomainType[]>(
-            (state) => state.todoLists
-        )
-        const isLoggedIn = useSelector<RootStateType>((state) => state.auth.isLoggedIn)
+        const todoLists = useSelector(getTodoLists)
+        const isLoggedIn = useSelector(getIsLoggedIn)
 
         useEffect(() => {
             if (demo || !isLoggedIn) return
-            dispatch(fetchTodolistsTC())
+            dispatch(fetchTodolists())
         }, [dispatch, demo, isLoggedIn])
 
         const onChangeFilter = useCallback(
             (todoListId: string, value: FilterValuesType) => {
-                dispatch(changeTodolistFilterAC(todoListId, value))
+                dispatch(todolistActions.changeTodolistFilter(todoListId, value))
             },
             [dispatch]
         )
 
         const onAddTodolist = useCallback(
             (title: string) => {
-                dispatch(addTodolistTC(title))
+                dispatch(addTodolist(title))
             },
             [dispatch]
         )
 
         const onRemoveTodoList = useCallback(
             (todolistId: string) => {
-                dispatch(removeTodolistTC(todolistId))
+                dispatch(removeTodolist(todolistId))
             },
             [dispatch]
         )
 
         const onChangeTodolistTitle = useCallback(
             (todoListId: string, title: string) => {
-                dispatch(changeTodolistTitleTC(todoListId, title))
+                dispatch(changeTodolistTitle(todoListId, title))
             },
             [dispatch]
         )

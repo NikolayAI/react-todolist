@@ -20,7 +20,8 @@ import MailIcon from '@material-ui/icons/Mail'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { useSelector } from 'react-redux'
 import { Button } from '@material-ui/core'
-import { RootStateType } from '../../redux/reducers/roootReducer'
+import { getIsLoggedIn } from '../../redux/selectors/authSelector'
+import { getStatus } from '../../redux/selectors/appSelectors'
 
 type HeaderMenuPropsType = {
     onLogout: () => void
@@ -30,8 +31,8 @@ export const HeaderMenu: React.FC<HeaderMenuPropsType> = React.memo(({ onLogout 
     const classes = useStyles1()
     const theme1 = useTheme()
     const [open, setOpen] = React.useState(false)
-    const status = useSelector<RootStateType>((state) => state.app.status)
-    const isLoggedIn = useSelector<RootStateType>((state) => state.auth.isLoggedIn)
+    const status = useSelector(getStatus)
+    const isLoggedIn = useSelector(getIsLoggedIn)
 
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)

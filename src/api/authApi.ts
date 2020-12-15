@@ -7,9 +7,7 @@ export const authAPI = {
             .then((res) => res.data)
     },
     login(data: LoginParamsType) {
-        return instance
-            .post<ResponseType<{ userId?: number }>>(`auth/login`, data)
-            .then((res) => res.data)
+        return instance.post<ResponseType>(`auth/login`, data).then((res) => res.data)
     },
     logout() {
         return instance

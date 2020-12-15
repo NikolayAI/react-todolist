@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { removeTaskTC, updateTaskTC } from '../../redux/reducers/tasks-reducer'
+import { removeTask, updateTask } from '../../redux/reducers/tasks-reducer'
 import React, { useCallback } from 'react'
 import { Checkbox, IconButton } from '@material-ui/core'
 import { EditableSpan } from '../EditableSpan'
@@ -17,13 +17,13 @@ export const Task: React.FC<TaskPropsType> = React.memo(
         const dispatch = useDispatch()
 
         const handleClickRemoveTask = useCallback(() => {
-            dispatch(removeTaskTC(todolistId, taskId))
+            dispatch(removeTask(todolistId, taskId))
         }, [dispatch, taskId, todolistId])
 
         const handleChangeStatusHandler = useCallback(
             (e: React.ChangeEvent<HTMLInputElement>) => {
                 dispatch(
-                    updateTaskTC(todolistId, taskId, {
+                    updateTask(todolistId, taskId, {
                         status: e.currentTarget.checked
                             ? TaskStatuses.Completed
                             : TaskStatuses.New,
@@ -35,7 +35,7 @@ export const Task: React.FC<TaskPropsType> = React.memo(
 
         const onChangeTitle = useCallback(
             (title: string) => {
-                dispatch(updateTaskTC(todolistId, taskId, { title }))
+                dispatch(updateTask(todolistId, taskId, { title }))
             },
             [dispatch, todolistId, taskId]
         )

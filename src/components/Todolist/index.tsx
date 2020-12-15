@@ -4,14 +4,14 @@ import { EditableSpan } from '../EditableSpan'
 import { Button, ButtonGroup, Grid, IconButton } from '@material-ui/core'
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation'
 import { useDispatch, useSelector } from 'react-redux'
-import { addTaskTC, fetchTasksTC } from '../../redux/reducers/tasks-reducer'
+import { addTask, fetchTasks } from '../../redux/reducers/tasks-reducer'
 import { Task } from '../Task'
 import {
     FilterValuesType,
     TodolistDomainType,
 } from '../../redux/reducers/todolists-reducer'
-import { RootStateType } from '../../redux/reducers/roootReducer'
-import { TaskStatuses, TaskType } from '../../api/api'
+import { TaskStatuses } from '../../api/api'
+import { getTasks } from '../../redux/selectors/tasksSelector'
 
 type PropsType = {
     todolist: TodolistDomainType
@@ -30,18 +30,16 @@ export const Todolist: React.FC<PropsType> = React.memo(
         todolist,
     }) => {
         const dispatch = useDispatch()
-        const tasks = useSelector<RootStateType, TaskType[]>(
-            (state) => state.tasks[todolist.id]
-        )
+        const tasks = useSelector(getTasks(todolist.id))
 
         useEffect(() => {
             if (demo) return
-            dispatch(fetchTasksTC(todolist.id))
+            dispatch(fetchTasks(todolist.id))
         }, [dispatch, todolist.id, demo])
 
         const onAddTask = useCallback(
             (title: string) => {
-                dispatch(addTaskTC(todolist.id, title))
+                dispatch(addTask(todolist.id, title))
             },
             [dispatch, todolist.id]
         )

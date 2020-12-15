@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { actions as authActions } from './authReducer'
+import { authActions } from './authReducer'
 import { createSlice } from '@reduxjs/toolkit'
 import { InferActionsTypes } from './roootReducer'
 import { authAPI } from '../../api/authApi'
@@ -28,24 +28,27 @@ export const appReducer = (
     }
 }
 
-export const actions = {
-    setAppStatusAC: (status: RequestStatusType) =>
+export const appActions = {
+    setAppStatus: (status: RequestStatusType) =>
         ({ type: 'todo/app/SET_STATUS', payload: status } as const),
-    setAppErrorAC: (error: string | null) =>
+    setAppError: (error: string | null) =>
         ({ type: 'todo/app/SET_ERROR', payload: error } as const),
-    setAppInitializedAC: (value: boolean) =>
+    setAppInitialized: (value: boolean) =>
         ({ type: 'todo/app/SET_IS_INITIALIZED', payload: value } as const),
 }
 
-export const initializedAppTC = () => (dispatch: Dispatch) => {
-    authAPI.me().then((data) => {
-        if (!data.resultCode) {
-            dispatch(authActions.setIsLoggedInAC(true))
+export const initializedApp = () => async (dispatch: Dispatch) => {
+    try {
+        const { resultCode } = await authAPI.me()
+        if (!resultCode) {
+            dispatch(authActions.setIsLoggedIn(true))
         }
-        dispatch(actions.setAppInitializedAC(true))
-    })
+        dispatch(appActions.setAppInitialized(true))
+    } catch (error) {
+        dispatch(appActions.setAppError(error))
+    }
 }
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type InitialStateType = typeof initialState
-type ActionsType = InferActionsTypes<typeof actions>
+export type InitialStateType = typeof initialState
+type ActionsType = InferActionsTypes<typeof appActions>

@@ -1,23 +1,23 @@
 import React from 'react'
 import {
+    Button,
     Checkbox,
     FormControl,
     FormControlLabel,
     FormGroup,
     FormLabel,
-    TextField,
-    Button,
     Grid,
+    TextField,
 } from '@material-ui/core'
 import { useFormik } from 'formik'
-import { loginTC } from '../../redux/reducers/authReducer'
+import { login } from '../../redux/reducers/authReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { RootStateType } from '../../redux/reducers/roootReducer'
+import { getIsLoggedIn } from '../../redux/selectors/authSelector'
 
 export const Login: React.FC = () => {
     const dispatch = useDispatch()
-    const isLoggedIn = useSelector<RootStateType>((state) => state.auth.isLoggedIn)
+    const isLoggedIn = useSelector(getIsLoggedIn)
 
     const formik = useFormik({
         validate: (values) => {
@@ -34,7 +34,7 @@ export const Login: React.FC = () => {
             rememberMe: false,
         },
         onSubmit: (values) => {
-            dispatch(loginTC(values))
+            dispatch(login(values))
         },
     })
 
