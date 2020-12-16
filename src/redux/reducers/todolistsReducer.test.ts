@@ -1,9 +1,14 @@
 import {
     FilterValuesType,
     TodolistDomainType,
-    todolistsReducer,
-    todolistActions,
-} from './todolists-reducer'
+    todoListsReducer,
+    removeTodolist,
+    addTodolist,
+    changeTodolistTitle,
+    changeTodolistFilter,
+    setTodolists,
+    changeTodolistEntityStatus,
+} from './todoListsReducer'
 import { v1 } from 'uuid'
 import { RequestStatusType } from './appReducer'
 import { TodolistType } from '../../api/api'
@@ -31,10 +36,7 @@ const startState: Array<TodolistDomainType> = [
 ]
 
 test('correct todolist should be removed', () => {
-    const endState = todolistsReducer(
-        startState,
-        todolistActions.removeTodolist(todolistId1)
-    )
+    const endState = todoListsReducer(startState, removeTodolist(todolistId1))
 
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(todolistId2)
@@ -48,7 +50,7 @@ test('correct todolist should be added', () => {
         id: 'anyId',
     }
 
-    const endState = todolistsReducer(startState, todolistActions.addTodolist(todolist))
+    const endState = todoListsReducer(startState, addTodolist(todolist))
 
     expect(endState.length).toBe(3)
     expect(endState[0].title).toBe(todolist.title)
@@ -57,9 +59,12 @@ test('correct todolist should be added', () => {
 test('correct todolist should change its name', () => {
     let newTodolistTitle = 'New TodolistList'
 
-    const endState = todolistsReducer(
+    const endState = todoListsReducer(
         startState,
-        todolistActions.changeTodolistTitle(todolistId2, newTodolistTitle)
+        changeTodolistTitle({
+            todolistId: todolistId2,
+            newTitle: newTodolistTitle,
+        })
     )
 
     expect(endState[0].title).toBe('What to learn')
@@ -69,9 +74,12 @@ test('correct todolist should change its name', () => {
 test('correct filter of todolist should be changed', () => {
     let newFilter: FilterValuesType = 'completed'
 
-    const endState = todolistsReducer(
+    const endState = todoListsReducer(
         startState,
-        todolistActions.changeTodolistFilter(todolistId2, newFilter)
+        changeTodolistFilter({
+            todolistId: todolistId2,
+            newFilter: newFilter,
+        })
     )
 
     expect(endState[0].filter).toBe('all')
@@ -79,7 +87,7 @@ test('correct filter of todolist should be changed', () => {
 })
 
 test('todolists should be added to the reducers', () => {
-    const endState = todolistsReducer([], todolistActions.setTodolists(startState))
+    const endState = todoListsReducer([], setTodolists(startState))
 
     expect(endState.length).toBe(2)
 })
@@ -87,9 +95,12 @@ test('todolists should be added to the reducers', () => {
 test('correct entity status of todolist should be changed', () => {
     let newStatus: RequestStatusType = 'loading'
 
-    const action = todolistActions.changeTodolistEntityStatus(todolistId2, newStatus)
+    const action = changeTodolistEntityStatus({
+        todolistId: todolistId2,
+        newStatus: newStatus,
+    })
 
-    const endState = todolistsReducer(startState, action)
+    const endState = todoListsReducer(startState, action)
 
     expect(endState[0].entityStatus).toBe('idle')
     expect(endState[1].entityStatus).toBe('loading')

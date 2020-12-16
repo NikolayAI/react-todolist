@@ -1,20 +1,14 @@
 import { combineReducers } from 'redux'
-import { todolistsReducer } from './todolists-reducer'
-import { tasksReducer } from './tasks-reducer'
+import { todoListsReducer } from './todoListsReducer'
+import { tasksReducer } from './tasksReducer'
 import { appReducer } from './appReducer'
 import { authReducer } from './authReducer'
 
 export const rootReducer = combineReducers({
-    todoLists: todolistsReducer,
+    todoLists: todoListsReducer,
     tasks: tasksReducer,
     app: appReducer,
     auth: authReducer,
 })
 
 export type RootStateType = ReturnType<typeof rootReducer>
-
-export type InferActionsTypes<T> = T extends {
-    [key: string]: (...args: Array<any>) => infer U
-}
-    ? U
-    : never

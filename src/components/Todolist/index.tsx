@@ -4,12 +4,12 @@ import { EditableSpan } from '../EditableSpan'
 import { Button, ButtonGroup, Grid, IconButton } from '@material-ui/core'
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation'
 import { useDispatch, useSelector } from 'react-redux'
-import { addTask, fetchTasks } from '../../redux/reducers/tasks-reducer'
+import { addTasks, fetchTasks } from '../../redux/reducers/tasksReducer'
 import { Task } from '../Task'
 import {
     FilterValuesType,
     TodolistDomainType,
-} from '../../redux/reducers/todolists-reducer'
+} from '../../redux/reducers/todoListsReducer'
 import { TaskStatuses } from '../../api/api'
 import { getTasks } from '../../redux/selectors/tasksSelector'
 
@@ -39,7 +39,7 @@ export const Todolist: React.FC<PropsType> = React.memo(
 
         const onAddTask = useCallback(
             (title: string) => {
-                dispatch(addTask(todolist.id, title))
+                dispatch(addTasks(todolist.id, title))
             },
             [dispatch, todolist.id]
         )

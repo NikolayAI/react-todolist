@@ -1,7 +1,7 @@
 import React from 'react'
 import { applyMiddleware, combineReducers, createStore } from 'redux'
-import { tasksReducer } from '../redux/reducers/tasks-reducer'
-import { todolistsReducer } from '../redux/reducers/todolists-reducer'
+import { tasksReducer } from '../redux/reducers/tasksReducer'
+import { todoListsReducer } from '../redux/reducers/todoListsReducer'
 import { v1 } from 'uuid'
 import { Provider } from 'react-redux'
 import { appReducer } from '../redux/reducers/appReducer'
@@ -11,7 +11,7 @@ import { TaskStatuses } from '../api/api'
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todoLists: todolistsReducer,
+    todoLists: todoListsReducer,
     app: appReducer,
     auth: authReducer,
 })

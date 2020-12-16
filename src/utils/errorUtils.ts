@@ -1,22 +1,20 @@
-import { appActions } from '../redux/reducers/appReducer'
+import { setAppStatus, setAppError } from '../redux/reducers/appReducer'
 import { Dispatch } from 'redux'
 import { ResponseType } from '../api/api'
 
 export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
     if (data.messages.length) {
-        dispatch(appActions.setAppError(data.messages[0]))
+        dispatch(setAppError(data.messages[0]))
     } else {
-        dispatch(appActions.setAppError('some error occurred'))
+        dispatch(setAppError('some error occurred'))
     }
-    dispatch(appActions.setAppStatus('failed'))
+    dispatch(setAppStatus('failed'))
 }
 
 export const handleServerNetworkError = (
     error: { message: string },
     dispatch: Dispatch
 ) => {
-    dispatch(
-        appActions.setAppError(error.message ? error.message : 'some error occurred')
-    )
-    dispatch(appActions.setAppStatus('failed'))
+    dispatch(setAppError(error.message ? error.message : 'some error occurred'))
+    dispatch(setAppStatus('failed'))
 }

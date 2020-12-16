@@ -1,6 +1,10 @@
-import { appReducer, InitialStateType, appActions } from './appReducer'
+import { appReducer, setAppStatus, setAppError, RequestStatusType } from './appReducer'
 
-let startState: InitialStateType
+let startState: {
+    error: string | null
+    status: RequestStatusType
+    isInitialized: boolean
+}
 
 beforeEach(() => {
     startState = {
@@ -11,13 +15,13 @@ beforeEach(() => {
 })
 
 test('correct error message should be set', () => {
-    const endState = appReducer(startState, appActions.setAppError('some error'))
+    const endState = appReducer(startState, setAppError('some error'))
 
     expect(endState.error).toBe('some error')
 })
 
 test('correct status should be set', () => {
-    const endState = appReducer(startState, appActions.setAppStatus('loading'))
+    const endState = appReducer(startState, setAppStatus('loading'))
 
     expect(endState.status).toBe('loading')
 })

@@ -5,13 +5,13 @@ import { AddItemForm } from '../../components/AddItemForm'
 import { Todolist } from '../../components/Todolist'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
-    addTodolist,
-    changeTodolistTitle,
+    addTodo,
+    changeTodoTitle,
     fetchTodolists,
     FilterValuesType,
-    removeTodolist,
-    todolistActions,
-} from '../../redux/reducers/todolists-reducer'
+    removeTodo,
+    changeTodolistFilter,
+} from '../../redux/reducers/todoListsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { getIsLoggedIn } from '../../redux/selectors/authSelector'
@@ -34,29 +34,29 @@ export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
         }, [dispatch, demo, isLoggedIn])
 
         const onChangeFilter = useCallback(
-            (todoListId: string, value: FilterValuesType) => {
-                dispatch(todolistActions.changeTodolistFilter(todoListId, value))
+            (todolistId: string, newFilter: FilterValuesType) => {
+                dispatch(changeTodolistFilter({ todolistId, newFilter }))
             },
             [dispatch]
         )
 
         const onAddTodolist = useCallback(
             (title: string) => {
-                dispatch(addTodolist(title))
+                dispatch(addTodo(title))
             },
             [dispatch]
         )
 
         const onRemoveTodoList = useCallback(
             (todolistId: string) => {
-                dispatch(removeTodolist(todolistId))
+                dispatch(removeTodo(todolistId))
             },
             [dispatch]
         )
 
         const onChangeTodolistTitle = useCallback(
             (todoListId: string, title: string) => {
-                dispatch(changeTodolistTitle(todoListId, title))
+                dispatch(changeTodoTitle(todoListId, title))
             },
             [dispatch]
         )
