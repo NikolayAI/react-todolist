@@ -24,7 +24,7 @@ const todoListSlice = createSlice({
             },
         },
         removeTodolist(state, action: PayloadAction<string>) {
-            const index = state.findIndex((tl) => tl.id !== action.payload)
+            const index = state.findIndex((tl) => tl.id === action.payload)
             if (index > -1) state.splice(index, 1)
         },
         changeTodolistTitle(

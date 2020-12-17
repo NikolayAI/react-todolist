@@ -9,7 +9,7 @@ import { Login } from '../pages/Login'
 import { initializedApp } from '../redux/reducers/appReducer'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { ErrorSnackbar } from '../components/ErrorSnackbar'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { logout } from '../redux/reducers/authReducer'
 import style from './index.module.css'
 import { getInitialized } from '../redux/selectors/appSelectors'
@@ -23,7 +23,7 @@ export const App: React.FC<AppPropsType> = ({ demo = false }) => {
     const isInitialized = useSelector(getInitialized)
 
     useEffect(() => {
-        dispatch(initializedApp())
+        if (!demo) dispatch(initializedApp())
     }, [dispatch])
 
     const onLogout = () => dispatch(logout())
@@ -37,24 +37,22 @@ export const App: React.FC<AppPropsType> = ({ demo = false }) => {
     }
 
     return (
-        <BrowserRouter>
-            <ThemeProvider theme={theme}>
-                <Typography variant='inherit' component='div'>
-                    <div className={style.App} style={{ overflowX: 'hidden' }}>
-                        <HeaderMenu onLogout={onLogout} />
-                        <ErrorSnackbar />
-                        <Container>
-                            <Route
-                                exact
-                                path={'/'}
-                                render={() => <TodolistList demo={demo} />}
-                            />
-                            <Route path={'/login/'} render={() => <Login />} />
-                        </Container>
-                    </div>
-                </Typography>
-            </ThemeProvider>
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+            <Typography variant='inherit' component='div'>
+                <div className={style.App} style={{ overflowX: 'hidden' }}>
+                    <HeaderMenu onLogout={onLogout} />
+                    <ErrorSnackbar />
+                    <Container>
+                        <Route
+                            exact
+                            path={'/'}
+                            render={() => <TodolistList demo={demo} />}
+                        />
+                        <Route path={'/login/'} render={() => <Login />} />
+                    </Container>
+                </div>
+            </Typography>
+        </ThemeProvider>
     )
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { App } from '../app'
 import { ReduxStoreProviderDecorator } from './ReduxStoreProviderDecorator'
+import { HashRouter } from 'react-router-dom'
 
 export default {
     title: 'App Component',
@@ -9,5 +10,9 @@ export default {
 }
 
 export const AppWithReduxBaseExample = () => {
-    return <App demo={true} />
+    return (
+        <HashRouter>
+            <App demo={true} />
+        </HashRouter>
+    )
 }

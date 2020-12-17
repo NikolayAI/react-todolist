@@ -8,6 +8,7 @@ import { appReducer } from '../redux/reducers/appReducer'
 import thunkMiddleware from 'redux-thunk'
 import { authReducer } from '../redux/reducers/authReducer'
 import { TaskStatuses } from '../api/api'
+import { configureStore } from '@reduxjs/toolkit'
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
@@ -94,18 +95,18 @@ const initialGlobalState: AppRootStateType = {
     app: {
         status: 'idle',
         error: null,
-        isInitialized: false,
+        isInitialized: true,
     },
     auth: {
-        isLoggedIn: false,
+        isLoggedIn: true,
     },
 }
 
-export const storyBookStore = createStore(
-    rootReducer,
-    initialGlobalState,
-    applyMiddleware(thunkMiddleware)
-)
+export const storyBookStore = configureStore({
+    reducer: rootReducer,
+    preloadedState: initialGlobalState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+})
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => {
     return <Provider store={storyBookStore}>{storyFn()}</Provider>
