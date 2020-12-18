@@ -9,14 +9,21 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core'
-import { useFormik } from 'formik'
+import { FormikHelpers, useFormik } from 'formik'
 import { login } from '../../redux/reducers/authReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { getIsLoggedIn } from '../../redux/selectors/authSelector'
+import { useAppDispatch } from '../../redux/store'
+
+type FormValuesType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
 
 export const Login: React.FC = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const isLoggedIn = useSelector(getIsLoggedIn)
 
     const formik = useFormik({
@@ -33,8 +40,14 @@ export const Login: React.FC = () => {
             password: '',
             rememberMe: false,
         },
-        onSubmit: (values) => {
-            dispatch(login(values))
+        onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const action = await dispatch(login(values))
+            if (login.rejected.match(action)) {
+                if (action.payload?.fieldsErrors?.length) {
+                    const error = action.payload.fieldsErrors[0]
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
         },
     })
 

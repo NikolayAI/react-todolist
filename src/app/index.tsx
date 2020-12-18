@@ -3,7 +3,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
 import 'fontsource-roboto'
 import { TodolistList } from '../pages/TodolistList'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { HeaderMenu } from '../components/HeaderMenu'
 import { Login } from '../pages/Login'
 import { initializedApp } from '../redux/reducers/appReducer'
@@ -13,18 +13,19 @@ import { Route } from 'react-router-dom'
 import { logout } from '../redux/reducers/authReducer'
 import style from './index.module.css'
 import { getInitialized } from '../redux/selectors/appSelectors'
+import { useAppDispatch } from '../redux/store'
 
 type AppPropsType = {
     demo?: boolean
 }
 
 export const App: React.FC<AppPropsType> = ({ demo = false }) => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const isInitialized = useSelector(getInitialized)
 
     useEffect(() => {
         if (!demo) dispatch(initializedApp())
-    }, [dispatch])
+    }, [dispatch, demo])
 
     const onLogout = () => dispatch(logout())
 

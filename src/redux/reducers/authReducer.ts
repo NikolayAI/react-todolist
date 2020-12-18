@@ -1,53 +1,78 @@
-import { Dispatch } from 'redux'
 import { setAppStatus } from './appReducer'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/errorUtils'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LoginParamsType } from '../../api/api'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { FieldErrorType, LoginParamsType } from '../../api/api'
 import { authAPI } from '../../api/authApi'
+import { AxiosError } from 'axios'
 
-const initialState = {
-    isLoggedIn: false,
-}
+export const login = createAsyncThunk<
+    undefined,
+    LoginParamsType,
+    { rejectValue: { errors: Array<string>; fieldsErrors?: Array<FieldErrorType> } }
+>('auth/login', async (loginData, { dispatch, rejectWithValue }) => {
+    try {
+        dispatch(setAppStatus('loading'))
+        const data = await authAPI.login(loginData)
+        if (!data.resultCode) {
+            dispatch(setAppStatus('succeeded'))
+            return
+        } else {
+            handleServerAppError(data, dispatch)
+            return rejectWithValue({
+                errors: data.messages,
+                fieldsErrors: data.fieldsErrors,
+            })
+        }
+    } catch (err) {
+        const error: AxiosError = err
+        handleServerNetworkError(error, dispatch)
+        return rejectWithValue({
+            errors: [error.message],
+            fieldsErrors: undefined,
+        })
+    }
+})
+
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async (param, { dispatch, rejectWithValue }) => {
+        try {
+            dispatch(setAppStatus('loading'))
+            const data = await authAPI.logout()
+            if (!data.resultCode) {
+                dispatch(setAppStatus('succeeded'))
+                return
+            } else {
+                handleServerAppError(data, dispatch)
+                return rejectWithValue({})
+            }
+        } catch (error) {
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue({})
+        }
+    }
+)
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState,
+    initialState: {
+        isLoggedIn: false,
+    },
     reducers: {
         setIsLoggedIn(state, action: PayloadAction<boolean>) {
             state.isLoggedIn = action.payload
         },
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.fulfilled, (state) => {
+                state.isLoggedIn = true
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.isLoggedIn = false
+            })
+    },
 })
-
-export const login = (loginData: LoginParamsType) => async (dispatch: Dispatch) => {
-    try {
-        dispatch(setAppStatus('loading'))
-        const data = await authAPI.login(loginData)
-        if (!data.resultCode) {
-            dispatch(setIsLoggedIn(true))
-            dispatch(setAppStatus('succeeded'))
-        } else {
-            handleServerAppError(data, dispatch)
-        }
-    } catch (error) {
-        handleServerNetworkError(error, dispatch)
-    }
-}
-
-export const logout = () => async (dispatch: Dispatch) => {
-    try {
-        dispatch(setAppStatus('loading'))
-        const data = await authAPI.logout()
-        if (!data.resultCode) {
-            dispatch(setIsLoggedIn(false))
-            dispatch(setAppStatus('succeeded'))
-        } else {
-            handleServerAppError(data, dispatch)
-        }
-    } catch (error) {
-        handleServerNetworkError(error, dispatch)
-    }
-}
 
 export const authReducer = authSlice.reducer
 export const { setIsLoggedIn } = authSlice.actions

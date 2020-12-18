@@ -3,7 +3,7 @@ import { AddItemForm } from '../AddItemForm'
 import { EditableSpan } from '../EditableSpan'
 import { Button, ButtonGroup, Grid, IconButton } from '@material-ui/core'
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { addTasks, fetchTasks } from '../../redux/reducers/tasksReducer'
 import { Task } from '../Task'
 import {
@@ -12,6 +12,7 @@ import {
 } from '../../redux/reducers/todoListsReducer'
 import { TaskStatuses } from '../../api/api'
 import { getTasks } from '../../redux/selectors/tasksSelector'
+import { useAppDispatch } from '../../redux/store'
 
 type PropsType = {
     todolist: TodolistDomainType
@@ -29,7 +30,7 @@ export const Todolist: React.FC<PropsType> = React.memo(
         onRemoveTodoList,
         todolist,
     }) => {
-        const dispatch = useDispatch()
+        const dispatch = useAppDispatch()
         const tasks = useSelector(getTasks(todolist.id))
 
         useEffect(() => {
@@ -39,7 +40,7 @@ export const Todolist: React.FC<PropsType> = React.memo(
 
         const onAddTask = useCallback(
             (title: string) => {
-                dispatch(addTasks(todolist.id, title))
+                dispatch(addTasks({ todolistId: todolist.id, title }))
             },
             [dispatch, todolist.id]
         )

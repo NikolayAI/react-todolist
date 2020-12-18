@@ -1,133 +1,152 @@
 import { todolistsApi } from '../../api/todolistsApi'
-import { Dispatch } from 'redux'
 import { setAppStatus } from './appReducer'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/errorUtils'
-import { RootStateType } from './roootReducer'
 import {
     TaskPriorities,
     TaskStatuses,
     TaskType,
     UpdateTaskModelType,
 } from '../../api/api'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { addTodolist, removeTodolist, setTodolists } from './todoListsReducer'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { addTodo, fetchTodoLists, removeTodo } from './todoListsReducer'
+import { RootStateType } from './roootReducer'
 
-const initialState: TasksStateType = {}
+export const fetchTasks = createAsyncThunk(
+    'tasks/fetchTasks',
+    async (todolistId: string, { dispatch }) => {
+        try {
+            dispatch(setAppStatus('loading'))
+            const { items } = await todolistsApi.getTasks(todolistId)
+            dispatch(setAppStatus('succeeded'))
+            return { tasks: items, todolistId }
+        } catch (error) {
+            console.log(error)
+            return error
+        }
+    }
+)
+
+export const removeTasks = createAsyncThunk(
+    'tasks/removeTasks',
+    async (param: { todolistId: string; taskId: string }) => {
+        const { todolistId, taskId } = param
+        try {
+            const { resultCode } = await todolistsApi.deleteTask(todolistId, taskId)
+            if (!resultCode) {
+                return { todolistId, taskId }
+            }
+        } catch (error) {
+            console.log(error)
+            return error
+        }
+    }
+)
+
+export const addTasks = createAsyncThunk(
+    'tasks/addTasks',
+    async (
+        param: { todolistId: string; title: string },
+        { dispatch, rejectWithValue }
+    ) => {
+        const { todolistId, title } = param
+        try {
+            dispatch(setAppStatus('loading'))
+            const data = await todolistsApi.createTask(todolistId, title)
+            if (!data.resultCode) {
+                dispatch(setAppStatus('succeeded'))
+                return data.data.item
+            } else {
+                handleServerAppError(data, dispatch)
+                return rejectWithValue(null)
+            }
+        } catch (error) {
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue(null)
+        }
+    }
+)
+
+export const updateTasks = createAsyncThunk(
+    'tasks/updateTask',
+    async (
+        param: {
+            todolistId: string
+            todolistTaskId: string
+            model: UpdateDomainTaskModelType
+        },
+        { dispatch, getState, rejectWithValue }
+    ) => {
+        const { todolistId, todolistTaskId, model } = param
+        const state = getState() as RootStateType
+        const task = state.tasks[todolistId].find((t) => t.id === todolistTaskId)
+
+        if (!task) {
+            return rejectWithValue('task not found in the reducers')
+        }
+
+        const apiModel: UpdateTaskModelType = {
+            title: task.title,
+            status: task.status,
+            startDate: task.startDate,
+            description: task.description,
+            priority: task.priority,
+            deadline: task.deadline,
+            ...model,
+        }
+
+        const data = await todolistsApi.updateTask(todolistId, todolistTaskId, apiModel)
+
+        try {
+            if (!data.resultCode) {
+                return param
+            } else {
+                handleServerAppError(data, dispatch)
+                return rejectWithValue(null)
+            }
+        } catch (error) {
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue(null)
+        }
+    }
+)
 
 const tasksSlice = createSlice({
     name: 'tasks',
-    initialState,
-    reducers: {
-        addTask(state, action: PayloadAction<TaskType>) {
-            state[action.payload.todoListId].unshift(action.payload)
-        },
-        removeTask(state, action: PayloadAction<{ todolistId: string; taskId: string }>) {
-            const tasks = state[action.payload.todolistId]
-            const index = tasks.findIndex((t) => t.id === action.payload.taskId)
-            if (index > -1) tasks.splice(index, 1)
-        },
-        updateTask(
-            state,
-            action: PayloadAction<{
-                todolistId: string
-                todolistTaskId: string
-                model: UpdateDomainTaskModelType
-            }>
-        ) {
-            const tasks = state[action.payload.todolistId]
-            const index = tasks.findIndex((t) => t.id === action.payload.todolistTaskId)
-            if (index > -1) tasks[index] = { ...tasks[index], ...action.payload.model }
-        },
-        setTasks(
-            state,
-            action: PayloadAction<{ tasks: Array<TaskType>; todolistId: string }>
-        ) {
-            state[action.payload.todolistId] = action.payload.tasks
-        },
-    },
-    extraReducers: (builder) =>
+    initialState: {} as TasksStateType,
+    reducers: {},
+    extraReducers: (builder) => {
         builder
-            .addCase(addTodolist, (state, action) => {
+            .addCase(addTodo.fulfilled, (state, action) => {
                 state[action.payload.id] = []
             })
-            .addCase(removeTodolist, (state, action) => {
+            .addCase(removeTodo.fulfilled, (state, action) => {
                 delete state[action.payload]
             })
-            .addCase(setTodolists, (state, action) => {
+            .addCase(fetchTodoLists.fulfilled, (state, action) => {
                 action.payload.forEach((tl) => (state[tl.id] = []))
-            }),
+            })
+            .addCase(fetchTasks.fulfilled, (state, action) => {
+                state[action.payload.todolistId] = action.payload.tasks
+                setAppStatus('succeeded')
+            })
+            .addCase(removeTasks.fulfilled, (state, action) => {
+                const tasks = state[action.payload.todolistId]
+                const index = tasks.findIndex((t) => t.id === action.payload.taskId)
+                if (index > -1) tasks.splice(index, 1)
+            })
+            .addCase(addTasks.fulfilled, (state, action) => {
+                state[action.payload.todoListId].unshift(action.payload)
+            })
+            .addCase(updateTasks.fulfilled, (state, action) => {
+                const tasks = state[action.payload.todolistId]
+                const index = tasks.findIndex(
+                    (t) => t.id === action.payload.todolistTaskId
+                )
+                if (index > -1)
+                    tasks[index] = { ...tasks[index], ...action.payload.model }
+            })
+    },
 })
-
-export const fetchTasks = (todolistId: string) => async (dispatch: Dispatch) => {
-    try {
-        dispatch(setAppStatus('loading'))
-        const { items } = await todolistsApi.getTasks(todolistId)
-        dispatch(setTasks({ tasks: items, todolistId }))
-        dispatch(setAppStatus('succeeded'))
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const removeTasks = (todolistId: string, taskId: string) => async (
-    dispatch: Dispatch
-) => {
-    try {
-        const { resultCode } = await todolistsApi.deleteTask(todolistId, taskId)
-        !resultCode && dispatch(removeTask({ todolistId, taskId }))
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const addTasks = (todolistId: string, title: string) => async (
-    dispatch: Dispatch
-) => {
-    try {
-        dispatch(setAppStatus('loading'))
-        const data = await todolistsApi.createTask(todolistId, title)
-        if (!data.resultCode) {
-            dispatch(addTask(data.data.item))
-            dispatch(setAppStatus('succeeded'))
-        } else {
-            handleServerAppError(data, dispatch)
-        }
-    } catch (error) {
-        handleServerNetworkError(error, dispatch)
-    }
-}
-
-export const updateTasks = (
-    todolistId: string,
-    todolistTaskId: string,
-    model: UpdateDomainTaskModelType
-) => async (dispatch: Dispatch, getState: () => RootStateType) => {
-    const state = getState()
-    const task = state.tasks[todolistId].find((t) => t.id === todolistTaskId)
-    if (!task) {
-        console.warn('task not found in the reducers')
-        return
-    }
-    const apiModel: UpdateTaskModelType = {
-        title: task.title,
-        status: task.status,
-        startDate: task.startDate,
-        description: task.description,
-        priority: task.priority,
-        deadline: task.deadline,
-        ...model,
-    }
-    const data = await todolistsApi.updateTask(todolistId, todolistTaskId, apiModel)
-    try {
-        if (!data.resultCode) {
-            dispatch(updateTask({ todolistId, todolistTaskId, model }))
-        } else {
-            handleServerAppError(data, dispatch)
-        }
-    } catch (error) {
-        handleServerNetworkError(error, dispatch)
-    }
-}
 
 export type UpdateDomainTaskModelType = {
     title?: string
@@ -140,4 +159,3 @@ export type UpdateDomainTaskModelType = {
 export type TasksStateType = { [key: string]: TaskType[] }
 
 export const tasksReducer = tasksSlice.reducer
-export const { addTask, removeTask, setTasks, updateTask } = tasksSlice.actions

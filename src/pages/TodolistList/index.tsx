@@ -6,16 +6,17 @@ import { Todolist } from '../../components/Todolist'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
     addTodo,
+    changeTodolistFilter,
     changeTodoTitle,
-    fetchTodolists,
+    fetchTodoLists,
     FilterValuesType,
     removeTodo,
-    changeTodolistFilter,
 } from '../../redux/reducers/todoListsReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { getIsLoggedIn } from '../../redux/selectors/authSelector'
 import { getTodoLists } from '../../redux/selectors/todolistsSelectors'
+import { useAppDispatch } from '../../redux/store'
 
 type TodolistContainerPropsType = {
     demo?: boolean
@@ -24,13 +25,13 @@ type TodolistContainerPropsType = {
 export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
     ({ demo }) => {
         const classes = useStyles()
-        const dispatch = useDispatch()
+        const dispatch = useAppDispatch()
         const todoLists = useSelector(getTodoLists)
         const isLoggedIn = useSelector(getIsLoggedIn)
 
         useEffect(() => {
             if (demo || !isLoggedIn) return
-            dispatch(fetchTodolists())
+            dispatch(fetchTodoLists())
         }, [dispatch, demo, isLoggedIn])
 
         const onChangeFilter = useCallback(
@@ -55,8 +56,8 @@ export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
         )
 
         const onChangeTodolistTitle = useCallback(
-            (todoListId: string, title: string) => {
-                dispatch(changeTodoTitle(todoListId, title))
+            (todolistId: string, newTitle: string) => {
+                dispatch(changeTodoTitle({ todolistId, newTitle }))
             },
             [dispatch]
         )
