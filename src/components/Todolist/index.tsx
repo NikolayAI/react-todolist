@@ -11,7 +11,7 @@ import {
     TodolistDomainType,
 } from '../../redux/reducers/todoListsReducer'
 import { TaskStatuses } from '../../api/api'
-import { getTasks } from '../../redux/selectors/tasksSelector'
+import { tasksSelector } from '../../redux/selectors/tasksSelector'
 import { useAppDispatch } from '../../redux/store'
 
 type PropsType = {
@@ -31,7 +31,7 @@ export const Todolist: React.FC<PropsType> = React.memo(
         todolist,
     }) => {
         const dispatch = useAppDispatch()
-        const tasks = useSelector(getTasks(todolist.id))
+        const tasks = useSelector(tasksSelector(todolist.id))
 
         useEffect(() => {
             if (demo) return

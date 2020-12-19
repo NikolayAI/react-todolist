@@ -12,7 +12,7 @@ import { ErrorSnackbar } from '../components/ErrorSnackbar'
 import { Route } from 'react-router-dom'
 import { logout } from '../redux/reducers/authReducer'
 import style from './index.module.css'
-import { getInitialized } from '../redux/selectors/appSelectors'
+import { initializedSelector } from '../redux/selectors/appSelectors'
 import { useAppDispatch } from '../redux/store'
 
 type AppPropsType = {
@@ -21,7 +21,7 @@ type AppPropsType = {
 
 export const App: React.FC<AppPropsType> = ({ demo = false }) => {
     const dispatch = useAppDispatch()
-    const isInitialized = useSelector(getInitialized)
+    const isInitialized = useSelector(initializedSelector)
 
     useEffect(() => {
         if (!demo) dispatch(initializedApp())

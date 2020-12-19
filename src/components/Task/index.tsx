@@ -20,7 +20,7 @@ export const Task: React.FC<TaskPropsType> = React.memo(
             dispatch(removeTasks({ todolistId, taskId }))
         }, [dispatch, taskId, todolistId])
 
-        const handleChangeStatusHandler = useCallback(
+        const handleChangeStatus = useCallback(
             (e: React.ChangeEvent<HTMLInputElement>) => {
                 dispatch(
                     updateTasks({
@@ -37,7 +37,7 @@ export const Task: React.FC<TaskPropsType> = React.memo(
             [dispatch, taskId, todolistId]
         )
 
-        const onChangeTitle = useCallback(
+        const handleChangeTitle = useCallback(
             (title: string) => {
                 dispatch(
                     updateTasks({
@@ -58,10 +58,10 @@ export const Task: React.FC<TaskPropsType> = React.memo(
             >
                 <Checkbox
                     color={'default'}
-                    onChange={handleChangeStatusHandler}
+                    onChange={handleChangeStatus}
                     checked={status === TaskStatuses.Completed}
                 />
-                <EditableSpan title={taskTitle} onChange={onChangeTitle} />
+                <EditableSpan title={taskTitle} onChange={handleChangeTitle} />
                 <IconButton onClick={handleClickRemoveTask}>
                     <DeleteOutlineIcon />
                 </IconButton>

@@ -4,19 +4,12 @@ import Paper from '@material-ui/core/Paper'
 import { AddItemForm } from '../../components/AddItemForm'
 import { Todolist } from '../../components/Todolist'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import {
-    addTodo,
-    changeTodolistFilter,
-    changeTodoTitle,
-    fetchTodoLists,
-    FilterValuesType,
-    removeTodo,
-} from '../../redux/reducers/todoListsReducer'
+import { FilterValuesType, todoActions } from '../../redux/reducers/todoListsReducer'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { getIsLoggedIn } from '../../redux/selectors/authSelector'
-import { getTodoLists } from '../../redux/selectors/todolistsSelectors'
-import { useAppDispatch } from '../../redux/store'
+import { isLoggedInSelector } from '../../redux/selectors/authSelector'
+import { todoListsSelector } from '../../redux/selectors/todolistsSelectors'
+import { useActions, useAppDispatch } from '../../redux/store'
 
 type TodolistContainerPropsType = {
     demo?: boolean
@@ -25,41 +18,48 @@ type TodolistContainerPropsType = {
 export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
     ({ demo }) => {
         const classes = useStyles()
+        const {
+            removeTodo,
+            addTodo,
+            changeTodolistFilter,
+            changeTodoTitle,
+            fetchTodoLists,
+        } = useActions(todoActions)
         const dispatch = useAppDispatch()
-        const todoLists = useSelector(getTodoLists)
-        const isLoggedIn = useSelector(getIsLoggedIn)
+        const todoLists = useSelector(todoListsSelector)
+        const isLoggedIn = useSelector(isLoggedInSelector)
 
         useEffect(() => {
             if (demo || !isLoggedIn) return
-            dispatch(fetchTodoLists())
-        }, [dispatch, demo, isLoggedIn])
+            fetchTodoLists()
+        }, [fetchTodoLists, demo, isLoggedIn])
 
         const onChangeFilter = useCallback(
             (todolistId: string, newFilter: FilterValuesType) => {
-                dispatch(changeTodolistFilter({ todolistId, newFilter }))
+                changeTodolistFilter({ todolistId, newFilter })
             },
-            [dispatch]
-        )
-
-        const onAddTodolist = useCallback(
-            (title: string) => {
-                dispatch(addTodo(title))
-            },
-            [dispatch]
-        )
-
-        const onRemoveTodoList = useCallback(
-            (todolistId: string) => {
-                dispatch(removeTodo(todolistId))
-            },
-            [dispatch]
+            [changeTodolistFilter]
         )
 
         const onChangeTodolistTitle = useCallback(
             (todolistId: string, newTitle: string) => {
-                dispatch(changeTodoTitle({ todolistId, newTitle }))
+                changeTodoTitle({ todolistId, newTitle })
             },
-            [dispatch]
+            [changeTodoTitle]
+        )
+
+        const onRemoveTodoList = useCallback(
+            (todolistId: string) => {
+                removeTodo(todolistId)
+            },
+            [removeTodo]
+        )
+
+        const onAddTodolist = useCallback(
+            (title: string) => {
+                addTodo(title)
+            },
+            [addTodo]
         )
 
         if (!isLoggedIn) return <Redirect to={'/login/'} />

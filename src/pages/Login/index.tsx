@@ -13,7 +13,7 @@ import { FormikHelpers, useFormik } from 'formik'
 import { login } from '../../redux/reducers/authReducer'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { getIsLoggedIn } from '../../redux/selectors/authSelector'
+import { isLoggedInSelector } from '../../redux/selectors/authSelector'
 import { useAppDispatch } from '../../redux/store'
 
 type FormValuesType = {
@@ -24,7 +24,7 @@ type FormValuesType = {
 
 export const Login: React.FC = () => {
     const dispatch = useAppDispatch()
-    const isLoggedIn = useSelector(getIsLoggedIn)
+    const isLoggedIn = useSelector(isLoggedInSelector)
 
     const formik = useFormik({
         validate: (values) => {

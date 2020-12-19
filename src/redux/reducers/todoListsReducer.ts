@@ -43,7 +43,12 @@ export const removeTodo = createAsyncThunk(
     async (todolistId: string, { dispatch, rejectWithValue }) => {
         try {
             dispatch(setAppStatus('loading'))
-            dispatch(changeTodolistEntityStatus({ todolistId, newStatus: 'loading' }))
+            dispatch(
+                todoActions.changeTodolistEntityStatus({
+                    todolistId,
+                    newStatus: 'loading',
+                })
+            )
             const { resultCode } = await todolistsApi.deleteTodolists(todolistId)
             if (!resultCode) {
                 dispatch(setAppStatus('succeeded'))
@@ -128,4 +133,11 @@ export type TodolistDomainType = TodolistType & {
 }
 
 export const todoListsReducer = todoListSlice.reducer
-export const { changeTodolistEntityStatus, changeTodolistFilter } = todoListSlice.actions
+export const todoActions = {
+    fetchTodoLists,
+    addTodo,
+    removeTodo,
+    changeTodoTitle,
+    changeTodolistEntityStatus: todoListSlice.actions.changeTodolistEntityStatus,
+    changeTodolistFilter: todoListSlice.actions.changeTodolistFilter,
+}

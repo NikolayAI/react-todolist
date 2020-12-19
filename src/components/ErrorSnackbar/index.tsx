@@ -3,7 +3,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 import { useSelector } from 'react-redux'
 import { setAppError } from '../../redux/reducers/appReducer'
-import { getError } from '../../redux/selectors/appSelectors'
+import { errorSelector } from '../../redux/selectors/appSelectors'
 import { useAppDispatch } from '../../redux/store'
 
 function Alert(props: AlertProps) {
@@ -12,7 +12,7 @@ function Alert(props: AlertProps) {
 
 export const ErrorSnackbar: React.FC = () => {
     const dispatch = useAppDispatch()
-    const error = useSelector(getError)
+    const error = useSelector(errorSelector)
     const isOpen = error !== null
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {

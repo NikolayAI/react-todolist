@@ -1,17 +1,21 @@
 import {
-    addTodo,
-    changeTodolistEntityStatus,
-    changeTodolistFilter,
-    changeTodoTitle,
-    fetchTodoLists,
     FilterValuesType,
-    removeTodo,
+    todoActions,
     TodolistDomainType,
     todoListsReducer,
 } from './todoListsReducer'
 import { v1 } from 'uuid'
 import { RequestStatusType } from './appReducer'
 import { TodolistType } from '../../api/api'
+
+const {
+    changeTodolistEntityStatus,
+    changeTodolistFilter,
+    removeTodo,
+    addTodo,
+    changeTodoTitle,
+    fetchTodoLists,
+} = todoActions
 
 let todolistId1: string
 let todolistId2: string
