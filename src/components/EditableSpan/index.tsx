@@ -3,10 +3,11 @@ import React, { useState } from 'react'
 type EditableSpanPropsType = {
     title: string
     onChange: (title: string) => void
+    fontSize?: number
 }
 
 export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
-    ({ title, onChange }) => {
+    ({ title, onChange, fontSize }) => {
         let [editMode, setEditMode] = useState(false)
         let [editableTitle, setEditableTitle] = useState('')
 
@@ -33,6 +34,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
 
         return editMode ? (
             <input
+                style={{ width: '100%', wordWrap: 'break-word' }}
                 autoFocus
                 onBlur={offEditModeHandler}
                 onKeyPress={offKeyPressEditModeHandler}
@@ -40,7 +42,10 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
                 onChange={onChangeTitleHandler}
             />
         ) : (
-            <span style={{ wordWrap: 'break-word' }} onDoubleClick={onEditModeHandler}>
+            <span
+                style={{ width: '100%', wordWrap: 'break-word', fontSize: fontSize }}
+                onDoubleClick={onEditModeHandler}
+            >
                 {title}
             </span>
         )

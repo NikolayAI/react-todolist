@@ -24,13 +24,27 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
             e.ctrlKey && e.key === 'Enter' && handleClickAddItem()
         }
 
-        const handleClickAddItem = () => {
-            title.trim() === '' ? setError('Field is required') : onAddItem(title.trim())
-            setTitle('')
+        const handleClickAddItem = async () => {
+            if (title.trim() === '') {
+                try {
+                    await onAddItem(title.trim())
+                    setTitle('')
+                } catch (error) {
+                    setError(error)
+                }
+            } else {
+                setError('Field is required')
+            }
         }
 
         return (
-            <Grid container direction='row' justify='center' alignItems='center'>
+            <Grid
+                container
+                direction='row'
+                justify='center'
+                alignItems='flex-end'
+                style={{ paddingBottom: 8 }}
+            >
                 <TextField
                     disabled={disabled}
                     error={error === 'Field is required'}
@@ -40,15 +54,17 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
                     onChange={onChangeHandler}
                     onKeyUp={onKeyUpHandler}
                     className={error ? 'error' : ''}
+                    style={{ width: `calc(100% - 40px)`, wordWrap: 'break-word' }}
                 />
                 <Button
                     disabled={disabled}
-                    size={'large'}
+                    size={'small'}
                     variant='contained'
                     color='secondary'
                     onClick={handleClickAddItem}
+                    style={{ minWidth: 40, marginBottom: 1 }}
                 >
-                    <PostAddIcon />
+                    <PostAddIcon fontSize={'small'} />
                 </Button>
                 {error && <div className={'error-message'}>{error}</div>}
             </Grid>

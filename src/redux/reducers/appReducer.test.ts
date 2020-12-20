@@ -1,4 +1,4 @@
-import { appReducer, setAppStatus, setAppError, RequestStatusType } from './appReducer'
+import { setAppStatus, setAppError, appReducer, RequestStatusType } from './appReducer'
 
 let startState: {
     error: string | null

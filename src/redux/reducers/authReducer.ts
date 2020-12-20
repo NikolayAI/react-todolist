@@ -5,7 +5,7 @@ import { FieldErrorType, LoginParamsType } from '../../api/api'
 import { authAPI } from '../../api/authApi'
 import { AxiosError } from 'axios'
 
-export const login = createAsyncThunk<
+const login = createAsyncThunk<
     undefined,
     LoginParamsType,
     { rejectValue: { errors: Array<string>; fieldsErrors?: Array<FieldErrorType> } }
@@ -33,7 +33,7 @@ export const login = createAsyncThunk<
     }
 })
 
-export const logout = createAsyncThunk(
+const logout = createAsyncThunk(
     'auth/logout',
     async (param, { dispatch, rejectWithValue }) => {
         try {
@@ -74,5 +74,6 @@ const authSlice = createSlice({
     },
 })
 
+const { setIsLoggedIn } = authSlice.actions
 export const authReducer = authSlice.reducer
-export const { setIsLoggedIn } = authSlice.actions
+export { login, logout, setIsLoggedIn }

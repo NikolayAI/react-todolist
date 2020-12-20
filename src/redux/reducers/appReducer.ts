@@ -2,22 +2,21 @@ import { setIsLoggedIn } from './authReducer'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authAPI } from '../../api/authApi'
 
-export const initializedApp = createAsyncThunk<
-    undefined,
-    undefined,
-    { rejectValue: string }
->('app/initialize', async (param, { dispatch, rejectWithValue }) => {
-    try {
-        const { resultCode } = await authAPI.me()
-        if (!resultCode) {
-            dispatch(setIsLoggedIn(true))
+const initializedApp = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
+    'app/initialize',
+    async (param, { dispatch, rejectWithValue }) => {
+        try {
+            const { resultCode } = await authAPI.me()
+            if (!resultCode) {
+                dispatch(setIsLoggedIn(true))
+            }
+            return
+        } catch (error) {
+            dispatch(appSlice.actions.setAppStatus(error))
+            return rejectWithValue('Some Error')
         }
-        return
-    } catch (error) {
-        dispatch(setAppError(error))
-        return rejectWithValue('Some Error')
     }
-})
+)
 
 const appSlice = createSlice({
     name: 'app',
@@ -43,5 +42,6 @@ const appSlice = createSlice({
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
+const { setAppError, setAppStatus } = appSlice.actions
 export const appReducer = appSlice.reducer
-export const { setAppStatus, setAppError } = appSlice.actions
+export { initializedApp, setAppError, setAppStatus }

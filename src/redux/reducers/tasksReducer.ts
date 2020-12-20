@@ -11,7 +11,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { addTodo, fetchTodoLists, removeTodo } from './todoListsReducer'
 import { RootStateType } from './roootReducer'
 
-export const fetchTasks = createAsyncThunk(
+const fetchTasks = createAsyncThunk(
     'tasks/fetchTasks',
     async (todolistId: string, { dispatch }) => {
         try {
@@ -26,7 +26,7 @@ export const fetchTasks = createAsyncThunk(
     }
 )
 
-export const removeTasks = createAsyncThunk(
+const removeTasks = createAsyncThunk(
     'tasks/removeTasks',
     async (param: { todolistId: string; taskId: string }) => {
         const { todolistId, taskId } = param
@@ -42,7 +42,7 @@ export const removeTasks = createAsyncThunk(
     }
 )
 
-export const addTasks = createAsyncThunk(
+const addTasks = createAsyncThunk(
     'tasks/addTasks',
     async (
         param: { todolistId: string; title: string },
@@ -66,7 +66,7 @@ export const addTasks = createAsyncThunk(
     }
 )
 
-export const updateTasks = createAsyncThunk(
+const updateTasks = createAsyncThunk(
     'tasks/updateTask',
     async (
         param: {
@@ -159,3 +159,4 @@ export type UpdateDomainTaskModelType = {
 export type TasksStateType = { [key: string]: TaskType[] }
 
 export const tasksReducer = tasksSlice.reducer
+export { fetchTasks, removeTasks, addTasks, updateTasks }

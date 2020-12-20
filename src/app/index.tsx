@@ -1,33 +1,34 @@
 import React, { useEffect } from 'react'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
-import { Container, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import 'fontsource-roboto'
 import { TodolistList } from '../pages/TodolistList'
 import { useSelector } from 'react-redux'
 import { HeaderMenu } from '../components/HeaderMenu'
 import { Login } from '../pages/Login'
-import { initializedApp } from '../redux/reducers/appReducer'
+import * as appActions from '../redux/reducers/appReducer'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { ErrorSnackbar } from '../components/ErrorSnackbar'
 import { Route } from 'react-router-dom'
-import { logout } from '../redux/reducers/authReducer'
+import * as authActions from '../redux/reducers/authReducer'
 import style from './index.module.css'
 import { initializedSelector } from '../redux/selectors/appSelectors'
-import { useAppDispatch } from '../redux/store'
+import { useActions } from '../redux/store'
 
 type AppPropsType = {
     demo?: boolean
 }
 
 export const App: React.FC<AppPropsType> = ({ demo = false }) => {
-    const dispatch = useAppDispatch()
+    const { initializedApp } = useActions(appActions)
+    const { logout } = useActions(authActions)
     const isInitialized = useSelector(initializedSelector)
 
     useEffect(() => {
-        if (!demo) dispatch(initializedApp())
-    }, [dispatch, demo])
+        if (!demo) initializedApp()
+    }, [initializedApp, demo])
 
-    const onLogout = () => dispatch(logout())
+    const onLogout = () => logout()
 
     if (!isInitialized) {
         return (
@@ -40,17 +41,11 @@ export const App: React.FC<AppPropsType> = ({ demo = false }) => {
     return (
         <ThemeProvider theme={theme}>
             <Typography variant='inherit' component='div'>
-                <div className={style.App} style={{ overflowX: 'hidden' }}>
+                <div>
                     <HeaderMenu onLogout={onLogout} />
                     <ErrorSnackbar />
-                    <Container>
-                        <Route
-                            exact
-                            path={'/'}
-                            render={() => <TodolistList demo={demo} />}
-                        />
-                        <Route path={'/login/'} render={() => <Login />} />
-                    </Container>
+                    <Route exact path={'/'} render={() => <TodolistList demo={demo} />} />
+                    <Route path={'/login/'} render={() => <Login />} />
                 </div>
             </Typography>
         </ThemeProvider>

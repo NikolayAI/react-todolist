@@ -1,10 +1,10 @@
 import {
+    updateTasks,
     addTasks,
     fetchTasks,
     removeTasks,
     tasksReducer,
     TasksStateType,
-    updateTasks,
 } from './tasksReducer'
 import { addTodo, removeTodo, fetchTodoLists } from './todoListsReducer'
 import { TaskPriorities, TaskStatuses } from '../../api/api'

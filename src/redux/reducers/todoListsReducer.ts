@@ -1,10 +1,10 @@
 import { todolistsApi } from '../../api/todolistsApi'
 import { RequestStatusType, setAppStatus } from './appReducer'
-import { handleServerNetworkError } from '../../utils/errorUtils'
+import { handleServerAppError, handleServerNetworkError } from '../../utils/errorUtils'
 import { TodolistType } from '../../api/api'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export const fetchTodoLists = createAsyncThunk(
+const fetchTodoLists = createAsyncThunk(
     'todoList/fetchTodoLists',
     async (param, { dispatch, rejectWithValue }) => {
         try {
@@ -19,7 +19,7 @@ export const fetchTodoLists = createAsyncThunk(
     }
 )
 
-export const addTodo = createAsyncThunk(
+const addTodo = createAsyncThunk(
     'todoList/addTodoLists',
     async (title: string, { dispatch, rejectWithValue }) => {
         try {
@@ -29,6 +29,7 @@ export const addTodo = createAsyncThunk(
                 dispatch(setAppStatus('succeeded'))
                 return data.data.item
             } else {
+                handleServerAppError(data, dispatch)
                 return rejectWithValue(null)
             }
         } catch (error) {
@@ -38,13 +39,13 @@ export const addTodo = createAsyncThunk(
     }
 )
 
-export const removeTodo = createAsyncThunk(
+const removeTodo = createAsyncThunk(
     'todoList/removeTodoLists',
     async (todolistId: string, { dispatch, rejectWithValue }) => {
         try {
             dispatch(setAppStatus('loading'))
             dispatch(
-                todoActions.changeTodolistEntityStatus({
+                changeTodolistEntityStatus({
                     todolistId,
                     newStatus: 'loading',
                 })
@@ -63,7 +64,7 @@ export const removeTodo = createAsyncThunk(
     }
 )
 
-export const changeTodoTitle = createAsyncThunk(
+const changeTodoTitle = createAsyncThunk(
     'todoList/changeTodoTitle',
     async (
         param: { todolistId: string; newTitle: string },
@@ -132,12 +133,13 @@ export type TodolistDomainType = TodolistType & {
     entityStatus: RequestStatusType
 }
 
+const { changeTodolistEntityStatus, changeTodolistFilter } = todoListSlice.actions
 export const todoListsReducer = todoListSlice.reducer
-export const todoActions = {
+export {
     fetchTodoLists,
     addTodo,
     removeTodo,
     changeTodoTitle,
-    changeTodolistEntityStatus: todoListSlice.actions.changeTodolistEntityStatus,
-    changeTodolistFilter: todoListSlice.actions.changeTodolistFilter,
+    changeTodolistEntityStatus,
+    changeTodolistFilter,
 }

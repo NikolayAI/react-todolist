@@ -4,12 +4,12 @@ import Paper from '@material-ui/core/Paper'
 import { AddItemForm } from '../../components/AddItemForm'
 import { Todolist } from '../../components/Todolist'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { FilterValuesType, todoActions } from '../../redux/reducers/todoListsReducer'
+import * as todoActions from '../../redux/reducers/todoListsReducer'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { isLoggedInSelector } from '../../redux/selectors/authSelector'
 import { todoListsSelector } from '../../redux/selectors/todolistsSelectors'
-import { useActions, useAppDispatch } from '../../redux/store'
+import { useActions } from '../../redux/store'
 
 type TodolistContainerPropsType = {
     demo?: boolean
@@ -18,14 +18,7 @@ type TodolistContainerPropsType = {
 export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
     ({ demo }) => {
         const classes = useStyles()
-        const {
-            removeTodo,
-            addTodo,
-            changeTodolistFilter,
-            changeTodoTitle,
-            fetchTodoLists,
-        } = useActions(todoActions)
-        const dispatch = useAppDispatch()
+        const { addTodo, fetchTodoLists } = useActions(todoActions)
         const todoLists = useSelector(todoListsSelector)
         const isLoggedIn = useSelector(isLoggedInSelector)
 
@@ -34,29 +27,8 @@ export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
             fetchTodoLists()
         }, [fetchTodoLists, demo, isLoggedIn])
 
-        const onChangeFilter = useCallback(
-            (todolistId: string, newFilter: FilterValuesType) => {
-                changeTodolistFilter({ todolistId, newFilter })
-            },
-            [changeTodolistFilter]
-        )
-
-        const onChangeTodolistTitle = useCallback(
-            (todolistId: string, newTitle: string) => {
-                changeTodoTitle({ todolistId, newTitle })
-            },
-            [changeTodoTitle]
-        )
-
-        const onRemoveTodoList = useCallback(
-            (todolistId: string) => {
-                removeTodo(todolistId)
-            },
-            [removeTodo]
-        )
-
-        const onAddTodolist = useCallback(
-            (title: string) => {
+        const handleAddTodo = useCallback(
+            async (title: string) => {
                 addTodo(title)
             },
             [addTodo]
@@ -66,33 +38,28 @@ export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
 
         return (
             <div className={classes.root}>
-                <Grid container spacing={3}>
-                    <Grid item xs>
+                <Grid container spacing={3} className={classes.gridContainer}>
+                    <Grid item xs className={classes.grid} style={{ padding: 8 }}>
                         <Paper className={classes.paper}>
                             <h2 style={{ minWidth: '240px', color: 'black' }}>
                                 Create Todolist
                             </h2>
-                            <AddItemForm onAddItem={onAddTodolist} />
+                            <AddItemForm onAddItem={handleAddTodo} />
                         </Paper>
                     </Grid>
                     {todoLists.map((tl) => {
                         return (
                             <Grid
                                 key={tl.id}
+                                className={classes.grid}
+                                style={{ padding: 8 }}
                                 item
-                                style={{ margin: '0' }}
                                 xs={12}
                                 sm={6}
                                 md={4}
                             >
                                 <Paper className={classes.paper}>
-                                    <Todolist
-                                        todolist={tl}
-                                        demo={demo}
-                                        onChangeFilter={onChangeFilter}
-                                        onChangeTodolistTitle={onChangeTodolistTitle}
-                                        onRemoveTodoList={onRemoveTodoList}
-                                    />
+                                    <Todolist todolist={tl} demo={demo} />
                                 </Paper>
                             </Grid>
                         )
@@ -107,12 +74,24 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             flexGrow: 1,
+            paddingLeft: 16,
+            paddingRight: 16,
+        },
+        gridContainer: {
+            flexWrap: 'nowrap',
+            overflowX: 'scroll',
+            minHeight: `calc(100vh - 112px)`,
+        },
+        grid: {
+            margin: 0,
+            minWidth: 280,
         },
         paper: {
-            padding: theme.spacing(2),
+            padding: theme.spacing(),
             textAlign: 'left',
             color: theme.palette.text.secondary,
             backgroundColor: '#dedede',
+            width: '100%',
         },
         menuButton: {
             marginRight: theme.spacing(2),
