@@ -4,12 +4,12 @@ import Paper from '@material-ui/core/Paper'
 import { AddItemForm } from '../../components/AddItemForm'
 import { Todolist } from '../../components/Todolist'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import * as todoActions from '../../redux/reducers/todoListsReducer'
+import { addTodo, fetchTodoLists } from '../../redux/reducers/todoListsReducer'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { isLoggedInSelector } from '../../redux/selectors/authSelector'
 import { todoListsSelector } from '../../redux/selectors/todolistsSelectors'
-import { useActions } from '../../redux/store'
+import { useAppDispatch } from '../../redux/store'
 
 type TodolistContainerPropsType = {
     demo?: boolean
@@ -18,20 +18,28 @@ type TodolistContainerPropsType = {
 export const TodolistList: React.FC<TodolistContainerPropsType> = React.memo(
     ({ demo }) => {
         const classes = useStyles()
-        const { addTodo, fetchTodoLists } = useActions(todoActions)
+        const dispatch = useAppDispatch()
         const todoLists = useSelector(todoListsSelector)
         const isLoggedIn = useSelector(isLoggedInSelector)
 
         useEffect(() => {
             if (demo || !isLoggedIn) return
-            fetchTodoLists()
-        }, [fetchTodoLists, demo, isLoggedIn])
+            dispatch(fetchTodoLists())
+        }, [dispatch, demo, isLoggedIn])
 
         const handleAddTodo = useCallback(
             async (title: string) => {
-                addTodo(title)
+                const action = await dispatch(addTodo(title))
+                if (addTodo.rejected.match(action)) {
+                    if (action.payload?.errors?.length) {
+                        const errorMessage = action.payload.errors[0]
+                        throw new Error(errorMessage)
+                    } else {
+                        throw new Error('Some error')
+                    }
+                }
             },
-            [addTodo]
+            [dispatch]
         )
 
         if (!isLoggedIn) return <Redirect to={'/login/'} />
@@ -84,14 +92,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         grid: {
             margin: 0,
-            minWidth: 280,
+            maxWidth: 280,
         },
         paper: {
             padding: theme.spacing(),
             textAlign: 'left',
             color: theme.palette.text.secondary,
             backgroundColor: '#dedede',
-            width: '100%',
+            width: 264,
         },
         menuButton: {
             marginRight: theme.spacing(2),

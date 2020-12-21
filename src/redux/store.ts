@@ -1,11 +1,7 @@
 import { rootReducer } from './reducers/roootReducer'
-import {
-    ActionCreatorsMapObject,
-    bindActionCreators,
-    configureStore,
-} from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { useMemo } from 'react'
+import { FieldErrorType } from '../api/api'
 
 export const store = configureStore({
     reducer: rootReducer,
@@ -15,12 +11,9 @@ export const store = configureStore({
 type AppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 
-export const useActions = <T extends ActionCreatorsMapObject<any>>(actions: T) => {
-    const dispatch = useAppDispatch()
-
-    const boundActions = useMemo(() => {
-        return bindActionCreators(actions, dispatch)
-    }, [actions, dispatch])
-
-    return boundActions
+export type ThunkErrorType = {
+    rejectValue: {
+        errors: Array<string>
+        fieldsErrors?: Array<FieldErrorType>
+    }
 }

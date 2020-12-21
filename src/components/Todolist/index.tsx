@@ -4,13 +4,14 @@ import { EditableSpan } from '../EditableSpan'
 import { Button, ButtonGroup, Grid, IconButton } from '@material-ui/core'
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation'
 import { useSelector } from 'react-redux'
-import * as tasksActions from '../../redux/reducers/tasksReducer'
+import { addTasks, fetchTasks } from '../../redux/reducers/tasksReducer'
 import { Task } from '../Task'
 import * as todoActions from '../../redux/reducers/todoListsReducer'
 import { FilterValuesType } from '../../redux/reducers/todoListsReducer'
 import { TaskStatuses } from '../../api/api'
 import { tasksSelector } from '../../redux/selectors/tasksSelector'
-import { useActions } from '../../redux/store'
+import { useAppDispatch } from '../../redux/store'
+import { useActions } from '../../utils/reduxUtils'
 
 type PropsType = {
     todolist: todoActions.TodolistDomainType
@@ -18,20 +19,28 @@ type PropsType = {
 }
 
 export const Todolist: React.FC<PropsType> = React.memo(({ demo = false, todolist }) => {
+    const dispatch = useAppDispatch()
     const { removeTodo, changeTodolistFilter, changeTodoTitle } = useActions(todoActions)
-    const { addTasks, fetchTasks } = useActions(tasksActions)
     const tasks = useSelector(tasksSelector(todolist.id))
 
     useEffect(() => {
         if (demo) return
-        fetchTasks(todolist.id)
-    }, [fetchTasks, todolist.id, demo])
+        dispatch(fetchTasks(todolist.id))
+    }, [dispatch, todolist.id, demo])
 
-    const onAddTask = useCallback(
+    const handleAddTask = useCallback(
         async (title: string) => {
-            addTasks({ todolistId: todolist.id, title })
+            const action = await dispatch(addTasks({ todolistId: todolist.id, title }))
+            if (addTasks.rejected.match(action)) {
+                if (action.payload?.errors?.length) {
+                    const errorMessage = action.payload.errors[0]
+                    throw new Error(errorMessage)
+                } else {
+                    throw new Error('Some error')
+                }
+            }
         },
-        [addTasks, todolist.id]
+        [dispatch, todolist.id]
     )
 
     const handleClickFilterButton = useCallback(
@@ -97,7 +106,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({ demo = false, todolis
                 </Grid>
             </Grid>
             <AddItemForm
-                onAddItem={onAddTask}
+                onAddItem={handleAddTask}
                 disabled={todolist.entityStatus === 'loading'}
             />
             <div style={{ paddingLeft: '0' }}>

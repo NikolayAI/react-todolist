@@ -3,7 +3,7 @@ import { Button, Grid, TextField } from '@material-ui/core'
 import PostAddIcon from '@material-ui/icons/PostAdd'
 
 type AddItemFormPropsType = {
-    onAddItem: (title: string) => void
+    onAddItem: (title: string) => Promise<any>
     disabled?: boolean
 }
 
@@ -25,12 +25,12 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
         }
 
         const handleClickAddItem = async () => {
-            if (title.trim() === '') {
+            if (title.trim() !== '') {
                 try {
                     await onAddItem(title.trim())
                     setTitle('')
                 } catch (error) {
-                    setError(error)
+                    setError(error.message)
                 }
             } else {
                 setError('Field is required')
@@ -66,7 +66,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
                 >
                     <PostAddIcon fontSize={'small'} />
                 </Button>
-                {error && <div className={'error-message'}>{error}</div>}
+                {error && <div style={{ color: 'red' }}>{error}</div>}
             </Grid>
         )
     }

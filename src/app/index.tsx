@@ -13,7 +13,7 @@ import { Route } from 'react-router-dom'
 import * as authActions from '../redux/reducers/authReducer'
 import style from './index.module.css'
 import { initializedSelector } from '../redux/selectors/appSelectors'
-import { useActions } from '../redux/store'
+import { useActions } from '../utils/reduxUtils'
 
 type AppPropsType = {
     demo?: boolean

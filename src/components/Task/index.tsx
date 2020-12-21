@@ -4,7 +4,7 @@ import { Checkbox, IconButton } from '@material-ui/core'
 import { EditableSpan } from '../EditableSpan'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import { TaskStatuses } from '../../api/api'
-import { useActions } from '../../redux/store'
+import { useActions } from '../../utils/reduxUtils'
 
 type TaskPropsType = {
     taskId: string

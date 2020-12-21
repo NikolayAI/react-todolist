@@ -9,7 +9,9 @@ import {
 
 export const todolistsApi = {
     getTodolists() {
-        return instance.get<Array<TodolistType>>(`todo-lists`).then((res) => res.data)
+        return instance
+            .get<ResponseType<Array<TodolistType>>>(`todo-lists`)
+            .then((res) => res.data)
     },
     createTodolist(title: string) {
         return instance
