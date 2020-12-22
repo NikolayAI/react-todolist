@@ -1,4 +1,4 @@
-import { RootStateType } from '../reducers/roootReducer'
+import { RootStateType } from '../reducers/rootReducer'
 import { createSelector } from '@reduxjs/toolkit'
 
 const getTasks = (state: RootStateType) => state.tasks

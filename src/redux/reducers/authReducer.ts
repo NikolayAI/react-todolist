@@ -6,7 +6,7 @@ import {
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LoginParamsType } from '../../api/api'
 import { authAPI } from '../../api/authApi'
-import { ThunkErrorType } from '../store'
+import { ThunkErrorType } from '../../app/store'
 
 const login = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
     'auth/login',

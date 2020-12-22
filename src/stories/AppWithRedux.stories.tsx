@@ -12,7 +12,7 @@ export default {
 export const AppWithReduxBaseExample = () => {
     return (
         <HashRouter>
-            <App demo={true} />
+            <App />
         </HashRouter>
     )
 }

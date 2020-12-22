@@ -10,8 +10,8 @@ import * as todoActions from '../../redux/reducers/todoListsReducer'
 import { FilterValuesType } from '../../redux/reducers/todoListsReducer'
 import { TaskStatuses } from '../../api/api'
 import { tasksSelector } from '../../redux/selectors/tasksSelector'
-import { useAppDispatch } from '../../redux/store'
 import { useActions } from '../../utils/reduxUtils'
+import { useAppDispatch } from '../../app/store'
 
 type PropsType = {
     todolist: todoActions.TodolistDomainType

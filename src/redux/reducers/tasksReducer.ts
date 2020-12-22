@@ -12,8 +12,8 @@ import {
 } from '../../api/api'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { addTodo, fetchTodoLists, removeTodo } from './todoListsReducer'
-import { RootStateType } from './roootReducer'
-import { ThunkErrorType } from '../store'
+import { RootStateType } from './rootReducer'
+import { ThunkErrorType } from '../../app/store'
 
 const fetchTasks = createAsyncThunk<
     { tasks: Array<TaskType>; todolistId: string },

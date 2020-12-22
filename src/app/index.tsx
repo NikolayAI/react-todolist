@@ -15,18 +15,14 @@ import style from './index.module.css'
 import { initializedSelector } from '../redux/selectors/appSelectors'
 import { useActions } from '../utils/reduxUtils'
 
-type AppPropsType = {
-    demo?: boolean
-}
-
-export const App: React.FC<AppPropsType> = ({ demo = false }) => {
+export const App: React.FC = () => {
     const { initializedApp } = useActions(appActions)
     const { logout } = useActions(authActions)
     const isInitialized = useSelector(initializedSelector)
 
     useEffect(() => {
-        if (!demo) initializedApp()
-    }, [initializedApp, demo])
+        if (!isInitialized) initializedApp()
+    }, [initializedApp, isInitialized])
 
     const onLogout = () => logout()
 
@@ -44,7 +40,7 @@ export const App: React.FC<AppPropsType> = ({ demo = false }) => {
                 <div>
                     <HeaderMenu onLogout={onLogout} />
                     <ErrorSnackbar />
-                    <Route exact path={'/'} render={() => <TodolistList demo={demo} />} />
+                    <Route exact path={'/'} render={() => <TodolistList />} />
                     <Route path={'/login/'} render={() => <Login />} />
                 </div>
             </Typography>

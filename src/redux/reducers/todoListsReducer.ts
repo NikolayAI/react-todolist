@@ -6,7 +6,7 @@ import {
 } from '../../utils/errorUtils'
 import { TodolistType } from '../../api/api'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ThunkErrorType } from '../store'
+import { ThunkErrorType } from '../../app/store'
 
 const fetchTodoLists = createAsyncThunk<Array<TodolistType>, undefined, ThunkErrorType>(
     'todoList/fetchTodoLists',

@@ -14,7 +14,7 @@ import { login } from '../../redux/reducers/authReducer'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { isLoggedInSelector } from '../../redux/selectors/authSelector'
-import { useAppDispatch } from '../../redux/store'
+import { useAppDispatch } from '../../app/store'
 
 type FormValuesType = {
     email: string
