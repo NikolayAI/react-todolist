@@ -16,7 +16,7 @@ import { RootStateType } from './rootReducer'
 import { ThunkErrorType } from '../../app/store'
 
 const fetchTasks = createAsyncThunk<
-    { tasks: Array<TaskType>; todolistId: string },
+    { tasks: TaskType[]; todolistId: string },
     string,
     ThunkErrorType
 >('tasks/fetchTasks', async (todolistId, { dispatch, rejectWithValue }) => {

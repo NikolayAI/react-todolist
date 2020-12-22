@@ -15,7 +15,7 @@ import { TodolistType } from '../../api/api'
 
 let todolistId1: string
 let todolistId2: string
-let startState: Array<TodolistDomainType> = []
+let startState: TodolistDomainType[] = []
 
 beforeEach(() => {
     todolistId1 = v1()
@@ -102,7 +102,7 @@ test('correct filter of todolist should be changed', () => {
 test('todolists should be added to the reducers', () => {
     const endState = todoListsReducer(
         [],
-        fetchTodoLists.fulfilled(startState, 'requestId')
+        fetchTodoLists.fulfilled(startState, 'requestId', undefined)
     )
 
     expect(endState.length).toBe(2)

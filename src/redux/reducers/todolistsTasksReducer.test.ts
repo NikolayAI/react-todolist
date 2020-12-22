@@ -4,7 +4,7 @@ import { addTodo, TodolistDomainType, todoListsReducer } from './todoListsReduce
 
 test('ids should be equals', () => {
     const startTasksState: TasksStateType = {}
-    const startTodolistsState: Array<TodolistDomainType> = []
+    const startTodolistsState: TodolistDomainType[] = []
 
     const todolist: TodolistType = {
         title: 'new todolist',

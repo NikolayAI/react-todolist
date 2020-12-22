@@ -8,7 +8,7 @@ export default {
 }
 
 const callback = action('Button "add" was pressed inside the form')
-const asyncCallback = async (...params: Array<any>) => {
+const asyncCallback = async (...params: any[]) => {
     callback(...params)
 }
 

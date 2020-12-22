@@ -8,7 +8,7 @@ import { TodolistType } from '../../api/api'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ThunkErrorType } from '../../app/store'
 
-const fetchTodoLists = createAsyncThunk<Array<TodolistType>, undefined, ThunkErrorType>(
+const fetchTodoLists = createAsyncThunk<TodolistType[], undefined, ThunkErrorType>(
     'todoList/fetchTodoLists',
     async (param, { dispatch, rejectWithValue }) => {
         try {
@@ -84,7 +84,7 @@ const changeTodoTitle = createAsyncThunk<
 
 const todoListSlice = createSlice({
     name: 'todoList',
-    initialState: [] as Array<TodolistDomainType>,
+    initialState: [] as TodolistDomainType[],
     reducers: {
         changeTodolistFilter(
             state,

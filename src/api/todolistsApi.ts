@@ -10,7 +10,7 @@ import {
 export const todolistsApi = {
     getTodolists() {
         return instance
-            .get<ResponseType<Array<TodolistType>>>(`todo-lists`)
+            .get<ResponseType<TodolistType[]>>(`todo-lists`)
             .then((res) => res.data)
     },
     createTodolist(title: string) {

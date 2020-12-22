@@ -19,7 +19,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>()
 
 export type ThunkErrorType = {
     rejectValue: {
-        errors: Array<string>
-        fieldsErrors?: Array<FieldErrorType>
+        errors: string[]
+        fieldsErrors?: FieldErrorType[]
     }
 }
