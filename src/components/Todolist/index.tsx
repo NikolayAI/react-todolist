@@ -97,7 +97,7 @@ export const Todolist: React.FC<PropsType> = React.memo(({ demo = false, todolis
                 <CancelPresentationIcon color={'action'} />
             </IconButton>
             <Grid container direction='row' justify='center' alignItems='center'>
-                <Grid justify='center' alignItems='center'>
+                <Grid>
                     <EditableSpan
                         title={todolist.title}
                         onChange={handleChangeTodolistTitle}

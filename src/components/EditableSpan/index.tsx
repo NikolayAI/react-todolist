@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import style from './index.module.css'
 
 type EditableSpanPropsType = {
     title: string
@@ -34,7 +35,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
 
         return editMode ? (
             <input
-                style={{ width: '100%', wordWrap: 'break-word' }}
+                className={style.editableInput}
                 autoFocus
                 onBlur={offEditModeHandler}
                 onKeyPress={offKeyPressEditModeHandler}
@@ -43,7 +44,8 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(
             />
         ) : (
             <span
-                style={{ width: '100%', wordWrap: 'break-word', fontSize: fontSize }}
+                className={style.editableSpan}
+                style={{ fontSize: fontSize }}
                 onDoubleClick={onEditModeHandler}
             >
                 {title}

@@ -1,0 +1,12 @@
+.gridContainer {
+    padding-bottom: 8px;
+}
+
+.textField {
+    width: calc(100% - 40px);
+    word-wrap: break-word;
+}
+
+.error {
+    color: red;
+}

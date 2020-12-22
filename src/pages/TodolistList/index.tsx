@@ -37,7 +37,7 @@ export const TodolistList: React.FC = React.memo(() => {
         [dispatch]
     )
 
-    if (!isLoggedIn) return <Redirect to={'/login/'} />
+    if (!isLoggedIn) return <Redirect to={'/login'} />
 
     return (
         <div className={classes.root}>

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { Button, Grid, TextField } from '@material-ui/core'
 import PostAddIcon from '@material-ui/icons/PostAdd'
+import style from './index.module.css'
 
 type AddItemFormPropsType = {
     onAddItem: (title: string) => Promise<any>
@@ -43,7 +44,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
                 direction='row'
                 justify='center'
                 alignItems='flex-end'
-                style={{ paddingBottom: 8 }}
+                className={style.gridContainer}
             >
                 <TextField
                     disabled={disabled}
@@ -53,8 +54,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(
                     value={title}
                     onChange={onChangeHandler}
                     onKeyUp={onKeyUpHandler}
-                    className={error ? 'error' : ''}
-                    style={{ width: `calc(100% - 40px)`, wordWrap: 'break-word' }}
+                    className={error ? style.textField + ' error' : style.textField}
                 />
                 <Button
                     disabled={disabled}

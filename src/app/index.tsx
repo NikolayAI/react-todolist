@@ -41,7 +41,7 @@ export const App: React.FC = () => {
                     <HeaderMenu onLogout={onLogout} />
                     <ErrorSnackbar />
                     <Route exact path={'/'} render={() => <TodolistList />} />
-                    <Route path={'/login/'} render={() => <Login />} />
+                    <Route path={'/login'} render={() => <Login />} />
                 </div>
             </Typography>
         </ThemeProvider>
