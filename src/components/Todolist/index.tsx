@@ -9,7 +9,7 @@ import { Task } from '../Task'
 import * as todoActions from '../../redux/reducers/todoListsReducer'
 import { FilterValuesType } from '../../redux/reducers/todoListsReducer'
 import { TaskStatuses } from '../../api/api'
-import { tasksSelector } from '../../redux/selectors/tasksSelector'
+import { selectTasks } from '../../redux/selectors/tasksSelector'
 import { useActions } from '../../utils/reduxUtils'
 import { useAppDispatch } from '../../app/store'
 
@@ -21,7 +21,7 @@ type PropsType = {
 export const Todolist: React.FC<PropsType> = React.memo(({ demo = false, todolist }) => {
     const dispatch = useAppDispatch()
     const { removeTodo, changeTodolistFilter, changeTodoTitle } = useActions(todoActions)
-    const tasks = useSelector(tasksSelector(todolist.id))
+    const tasks = useSelector(selectTasks(todolist.id))
 
     useEffect(() => {
         if (demo) return

@@ -7,15 +7,15 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { addTodo, fetchTodoLists } from '../../redux/reducers/todoListsReducer'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { isLoggedInSelector } from '../../redux/selectors/authSelector'
-import { todoListsSelector } from '../../redux/selectors/todolistsSelectors'
+import { selectIsLoggedIn } from '../../redux/selectors/authSelector'
+import { selectTodoLists } from '../../redux/selectors/todolistsSelectors'
 import { useAppDispatch } from '../../app/store'
 
 export const TodolistList: React.FC = React.memo(() => {
     const classes = useStyles()
     const dispatch = useAppDispatch()
-    const todoLists = useSelector(todoListsSelector)
-    const isLoggedIn = useSelector(isLoggedInSelector)
+    const todoLists = useSelector(selectTodoLists)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
     useEffect(() => {
         if (!isLoggedIn) return

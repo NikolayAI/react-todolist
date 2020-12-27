@@ -12,13 +12,13 @@ import { ErrorSnackbar } from '../components/ErrorSnackbar'
 import { Route } from 'react-router-dom'
 import * as authActions from '../redux/reducers/authReducer'
 import style from './index.module.css'
-import { initializedSelector } from '../redux/selectors/appSelectors'
+import { selectInitialized } from '../redux/selectors/appSelectors'
 import { useActions } from '../utils/reduxUtils'
 
 export const App: React.FC = () => {
     const { initializedApp } = useActions(appActions)
     const { logout } = useActions(authActions)
-    const isInitialized = useSelector(initializedSelector)
+    const isInitialized = useSelector(selectInitialized)
 
     useEffect(() => {
         if (!isInitialized) initializedApp()
